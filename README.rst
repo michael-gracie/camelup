@@ -6,14 +6,14 @@ camelup
   :target: https://github.com/amvb/black
 
 
-Full sphix documentation can be found `here <https://github.com/michael-gracie/pages/camelup/build/html/index.html>`_
+Full sphix documentation can be found `here <https://michael-gracie.github.io/camelup/>`_
 
 Quick Installation
 ------------------
 
 .. code-block:: bash
 
-  pip install git+https://github.com/michael-gracie/cookiecutter.project_slug.git
+  pip install git+https://github.com/michael-gracie/camelup.git
 
 Developer Instructions
 ----------------------
