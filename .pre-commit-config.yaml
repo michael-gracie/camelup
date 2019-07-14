@@ -1,0 +1,20 @@
+repos:
+  - repo: https://github.com/ambv/black
+    rev: stable
+    hooks:
+      - id: black
+        types: [file, python]
+        language_version: python3.7
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: v4.3.18
+    hooks:
+      - id: isort
+  - repo: https://github.com/pre-commit/pre-commit
+    rev: v2.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: debug-statements
+      - id: end_of_file_fixer
+      - id: flake8
+        files: ^camelup/
+        language_version: python3.7
