@@ -117,28 +117,62 @@ class GamePlay:
         return d
 
 
-def move(camel_df, tiles, camel, roll):
+def move_dict(camel_dict, camel, roll):
+    camel_space = camel_dict[camel]["space"]
+    camel_height = camel_dict[camel]["height"]
+    min_height_movers, num_movers, camels_to_move = camels_to_move_dict(
+        camel_dict, camel_space, camel_height
+    )
+    destination = camel_space + roll
+    max_height_dest, camels_in_dest = camels_in_dest_dict(camel_dict, destination)
+    reg_move_dict(
+        camel_dict, camels_to_move, destination, min_height_movers, max_height_dest
+    )
+
+
+def reg_move_dict(camel_dict, movers, destination, min_height_movers, max_height_dest):
+    """
+    Regular move to a square
+    """
+    for key, val in camel_dict.items():
+        if key in movers:
+            val["space"] = destination
+            val["height"] = val["height"] - (min_height_movers - 1) + max_height_dest
+
+
+def camels_to_move_dict(camel_dict, space, height):
+    min_height_movers = 10000
+    num_movers = 0
+    camels_to_move = []
+    for key, val in camel_dict.items():
+        if val["space"] == space and val["height"] >= height:
+            if val["height"] < min_height_movers:
+                min_height_movers = val["height"]
+            num_movers += 1
+            camels_to_move.append(key)
+    return min_height_movers, num_movers, camels_to_move
+
+
+def camels_in_dest_dict(camel_dict, destination):
+    max_height_dest = 0
+    camels_in_dest = []
+    for key, val in camel_dict.items():
+        if val["space"] == destination:
+            if val["height"] > max_height_dest:
+                max_height_dest = val["height"]
+            camels_in_dest.append(key)
+    return max_height_dest, camels_in_dest
+
+
+def move_df(camel_df, camel, roll):
     space = camel_df.loc[camel]["space"]
     height = camel_df.loc[camel]["height"]
-    movers = camels_to_move(camel_df, space, height)
+    movers = camels_to_move_df(camel_df, space, height)
     destination = space + roll
-
-    if destination in tiles.index:
-        tile_type = tiles.loc[destination]["tile_type"]
-        if tile_type == "block":
-            destination -= 1
-            block_move(camel_df, movers, destination)
-            return
-        elif tile_type == "skip":
-            destination += 1
-            reg_move(camel_df, movers, destination)
-            return
-    else:
-        reg_move(camel_df, movers, destination)
-        return
+    reg_move_df(camel_df, movers, destination)
 
 
-def camels_to_move(camel_df, space, height):
+def camels_to_move_df(camel_df, space, height):
     """
     """
     return camel_df.loc[
@@ -146,41 +180,24 @@ def camels_to_move(camel_df, space, height):
     ].index
 
 
-def camels_in_dest(camel_df, destination):
+def camels_in_dest_df(camel_df, destination):
     """
     Returns camels in destination
     """
     return camel_df[camel_df["space"].eq(destination)].index
 
 
-def reg_move(camel_df, movers, destination):
+def reg_move_df(camel_df, movers, destination):
     """
     Regular move to a square
     """
-    dest_camels = camels_in_dest(camel_df, destination)
+    dest_camels = camels_in_dest_df(camel_df, destination)
     min_height_movers = camel_df.loc[movers]["height"].min()
     if dest_camels.empty:
-        max_height_dest = camel_df.loc[dest_camels]["height"].max()
-    else:
         max_height_dest = 0
+    else:
+        max_height_dest = camel_df.loc[dest_camels]["height"].max()
     camel_df.loc[movers, "space"] = destination
     camel_df.loc[movers, "height"] = (
         camel_df.loc[movers, "height"] - (min_height_movers - 1) + max_height_dest
     )
-
-
-def block_move(camel_df, movers, destination):
-    """
-    Block move to a square
-    """
-    dest_camels = camels_in_dest(camel_df, destination)
-    min_height_movers = camel_df.loc[movers]["height"].min()
-    num_movers = camel_df.loc[movers]["height"].index.sizeb
-    camel_df.loc[movers]["space"] = destination
-    camel_df.loc[movers]["height"] = camel_df.loc[movers]["height"] - (
-        min_height_movers - 1
-    )
-    if dest_camels:
-        camel_df.loc[dest_camels]["height"] = (
-            camel_df.loc[dest_camels]["height"] + num_movers
-        )
