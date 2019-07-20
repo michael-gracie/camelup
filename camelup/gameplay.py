@@ -123,7 +123,7 @@ def move(camel_df, tiles, camel, roll):
     movers = camels_to_move(camel_df, space, height)
     destination = space + roll
 
-    if tiles.loc[destination]:
+    if destination in tiles.index:
         tile_type = tiles.loc[destination]["tile_type"]
         if tile_type == "block":
             destination -= 1
@@ -133,9 +133,9 @@ def move(camel_df, tiles, camel, roll):
             destination += 1
             reg_move(camel_df, movers, destination)
             return
-        else:
-            reg_move(camel_df, movers, destination)
-            return
+    else:
+        reg_move(camel_df, movers, destination)
+        return
 
 
 def camels_to_move(camel_df, space, height):
@@ -159,13 +159,13 @@ def reg_move(camel_df, movers, destination):
     """
     dest_camels = camels_in_dest(camel_df, destination)
     min_height_movers = camel_df.loc[movers]["height"].min()
-    if dest_camels:
+    if dest_camels.empty:
         max_height_dest = camel_df.loc[dest_camels]["height"].max()
     else:
         max_height_dest = 0
-    camel_df.loc[movers]["space"] = destination
-    camel_df.loc[movers]["height"] = (
-        camel_df.loc[movers]["height"] - (min_height_movers - 1) + max_height_dest
+    camel_df.loc[movers, "space"] = destination
+    camel_df.loc[movers, "height"] = (
+        camel_df.loc[movers, "height"] - (min_height_movers - 1) + max_height_dest
     )
 
 
@@ -175,7 +175,7 @@ def block_move(camel_df, movers, destination):
     """
     dest_camels = camels_in_dest(camel_df, destination)
     min_height_movers = camel_df.loc[movers]["height"].min()
-    num_movers = camel_df.loc[movers]["height"].index.size
+    num_movers = camel_df.loc[movers]["height"].index.sizeb
     camel_df.loc[movers]["space"] = destination
     camel_df.loc[movers]["height"] = camel_df.loc[movers]["height"] - (
         min_height_movers - 1
