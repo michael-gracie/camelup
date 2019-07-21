@@ -15,7 +15,7 @@ camel_dict = {
     "white": {"height": 2, "space": 4, "need_roll": True},
 }
 
-tiles_dict = {5: "block", 2: "skip"}
+tiles_dict = {5: {"type": "block", "player": 1}, 2: {"type": "skip", "player": 1}}
 
 
 @pytest.fixture
@@ -102,7 +102,7 @@ def test_reg_move_open_square(camel_dict_copy):
 
 
 def test_move_with_block(camel_dict_copy):
-    gameplay.move(camel_dict_copy, tiles_dict, "red", 4)
+    assert gameplay.move(camel_dict_copy, tiles_dict, "red", 4) == 5
     assert camel_dict_copy["white"]["space"] == 4
     assert camel_dict_copy["yellow"]["space"] == 4
     assert camel_dict_copy["blue"]["space"] == 4
@@ -114,6 +114,6 @@ def test_move_with_block(camel_dict_copy):
 
 
 def test_move_with_skip(camel_dict_copy):
-    gameplay.move(camel_dict_copy, tiles_dict, "blue", 1)
+    assert gameplay.move(camel_dict_copy, tiles_dict, "blue", 1) == 2
     assert camel_dict_copy["blue"]["space"] == 3
     assert camel_dict_copy["blue"]["height"] == 2

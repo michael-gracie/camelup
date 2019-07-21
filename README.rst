@@ -28,7 +28,7 @@ This will enable the following
 
 - Unit testing using `pytest <https://docs.pytest.org/en/latest/>`_
   - Run ``pytest`` in root package directory
-- Pre commit hooks ensuring codes style using `black <https://github.com/ambv/black`_ and `isort <https://github.com/pre-commit/mirrors-isort>`_
+- Pre commit hooks ensuring codes style using `black <https://github.com/ambv/black>`_ and `isort <https://github.com/pre-commit/mirrors-isort>`_
 - Sphinx documentation
   - To create sphinx run ``make html`` in package docs folder
   - To view locally run ``python -m http.server``
