@@ -27,6 +27,7 @@ class Game:
         self._gen_player_dict()
         self.tiles_dict = dict()
         self.bet_tiles = dict()
+        self._gen_bet_tiles()
         self.winner_bets = dict()
         self.loser_bets = dict()
         self.state = 1
@@ -41,27 +42,43 @@ class Game:
         base = {
             "winner_cards": config.CAMELS,
             "loser_cards": config.CAMELS,
-            "tiles": config.TILES,
+            "tile": True,
             "coins": config.COINS,
             "bet_tiles": None,
         }
         for player in range(self.num_players):
             self.player_dict[player + 1] = base
 
+    def _gen_bet_tiles(self):
+        base = [5, 3, 2]
+        for camel in config.CAMELS:
+            self.bet_tiles[camel] = base
+
     def play(self):
         pass
 
     def end_turn(self):
+
         pass
 
     def score(self):
         pass
 
     def available_moves(self):
-        pass
+        moves = dict()
+        for card in self.player_dict[self.state]["winner_cards"]:
+            moves[f"Bet Game Winner {card}"] = f"self.play_winner_card({card})"
+        for card in self.player_dict[self.state]["loser_cards"]:
+            moves[f"Bet Game Loser {card}"] = f"self.play_loser_card({card})"
+        for camel in self.bet_tiles:
+            moves[
+                f"Bet Round Winner {camel} - {camel[0]} Points"
+            ] = f"self.play_bet_tile({camel})"
+        moves["Roll"] = "self.roll(roll)"
+        return moves
 
     def play_tile(self, tile_type, space):
-        self.player_dict[self.state]["tiles"].remove[tile_type]
+        self.player_dict[self.state]["tile"] = False
         self.tiles_dict[space] = {"tile_type": tile_type, "player": self.state}
 
     def play_winner_card(self, camel):
@@ -72,13 +89,21 @@ class Game:
         self.player_dict[self.state]["loser_cards"].remove[camel]
         self.loser_bets["camel"] = self.state
 
+    def play_bet_tile(self, camel):
+        if self.bet_tiles[camel]:
+            pop = self.bet_tiles[camel][0]
+            self.player_dict[self.state]["bet_tiles"][camel] = pop
+            self.bet_tiles[camel].remove(pop)
+        if self.bet_tiles[camel] == []:
+            self.bet_tiles.pop(camel, None)
+
     def roll(self, camel, roll):
         gameplay.move(self.camel_dict, self.tiles_dict, camel, roll)
         self.player_dict[self.state]["coins"] += 1
 
     def _winner(self, camel_dict):
         """
-        Computes the places of in the race
+        Computes the places of camels in the race
         """
         return {
             camel: place + 1
