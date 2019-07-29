@@ -61,7 +61,11 @@ class Game:
 
         pass
 
-    def score(self):
+    def score_turn(self):
+        order = self._winner(self.camel_dict)
+        for player in self.player_dict:
+            tiles = player["bet_tiles"]
+            return order, tiles
         pass
 
     def available_moves(self):
@@ -90,6 +94,9 @@ class Game:
         self.loser_bets["camel"] = self.state
 
     def play_bet_tile(self, camel):
+        """
+        Need to redo this so that a player can take multiple tiles
+        """
         if self.bet_tiles[camel]:
             pop = self.bet_tiles[camel][0]
             self.player_dict[self.state]["bet_tiles"][camel] = pop
