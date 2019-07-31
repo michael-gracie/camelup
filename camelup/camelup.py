@@ -7,7 +7,10 @@ import random
 
 from copy import deepcopy
 
+import numpy as np
 import pandas as pd
+
+import utilities as util
 
 from camelup import config, gameplay
 
@@ -44,7 +47,7 @@ class Game:
             "loser_cards": config.CAMELS,
             "tile": True,
             "coins": config.COINS,
-            "bet_tiles": None,
+            "bet_tiles": dict(),
         }
         for player in range(self.num_players):
             self.player_dict[player + 1] = base
@@ -54,19 +57,38 @@ class Game:
         for camel in config.CAMELS:
             self.bet_tiles[camel] = base
 
-    def play(self):
-        pass
+    def end_round(self):
+        """The end of the round triggers the following
+        1. Scores the tiles
+        2. Resets the camels need_roll flag
+        3. Returns the skip/block tile to the players hand
+        4. Removes the bet tiles from the players hand
+        5. Place the bet tiles back on the board
+        """
+        self.score_turn()
+        for val in self.camel_dict.values():
+            val["need_roll"] = True
+        self.tiles_dict = dict()
+        for value in self.player_dict.values():
+            val["tile"] = True
+            val["bet_tiles"] = dict()
+        self._gen_bet_tiles()
 
-    def end_turn(self):
-
-        pass
-
-    def score_turn(self):
-        order = self._winner(self.camel_dict)
+    def score_round(self):
+        """Scores the round based on the tiles the players have and the position of camels.
+        If the camel is in first then the player gets full points.
+        If in second they get 1 point, else they lose a point
+        """
+        order = list(self._winner(self.camel_dict.keys()))
         for player in self.player_dict:
             tiles = player["bet_tiles"]
-            return order, tiles
-        pass
+            for key, val in tiles.items():
+                if key == order[0]:
+                    self.player_dict[player]["coins"] += np.sum(val)
+                if key == order[1]:
+                    self.player_dict[player]["coins"] += np.count(val)
+                else:
+                    self.player_dict[player]["coins"] -= np.count(val)
 
     def available_moves(self):
         moves = dict()
@@ -80,6 +102,13 @@ class Game:
             ] = f"self.play_bet_tile({camel})"
         moves["Roll"] = "self.roll(roll)"
         return moves
+
+    def play(self, move):
+        eval(move)
+        self.state += 1  # TODO fix this
+
+    def available_tiles_placements(self):
+        pass
 
     def play_tile(self, tile_type, space):
         self.player_dict[self.state]["tile"] = False
@@ -99,7 +128,7 @@ class Game:
         """
         if self.bet_tiles[camel]:
             pop = self.bet_tiles[camel][0]
-            self.player_dict[self.state]["bet_tiles"][camel] = pop
+            util.add_list_to_dict(self.player_dict[self.state]["bet_tiles"], camel, pop)
             self.bet_tiles[camel].remove(pop)
         if self.bet_tiles[camel] == []:
             self.bet_tiles.pop(camel, None)
