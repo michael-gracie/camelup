@@ -10,9 +10,8 @@ from copy import deepcopy
 import numpy as np
 import pandas as pd
 
-import utilities as util
-
 from camelup import config, gameplay
+from camelup import utilities as util
 
 
 logger = logging.getLogger(__name__)
@@ -24,6 +23,7 @@ class Game:
     """
 
     def __init__(self, num_players):
+        self.num_players = num_players
         self.camel_dict = dict()
         self._gen_camel_dict()
         self.player_dict = dict()
@@ -31,10 +31,9 @@ class Game:
         self.tiles_dict = dict()
         self.bet_tiles = dict()
         self._gen_bet_tiles()
-        self.winner_bets = dict()
-        self.loser_bets = dict()
+        self.winner_bets = []
+        self.loser_bets = []
         self.state = 1
-        self.num_players = num_players
 
     def _gen_camel_dict(self):
         base = {"height": None, "space": None, "need_roll": True}
@@ -57,6 +56,33 @@ class Game:
         for camel in config.CAMELS:
             self.bet_tiles[camel] = base
 
+    def end_game(self):
+        """
+        """
+        self.score_round()
+        order = list(self._winner(self.camel_dict.keys()))
+        winner = order[0]
+        loser = order[-1]
+        rewards = config.BET_POINTS
+        for bet in self.winner_bets:
+            if bet[0] == winner:
+                if rewards:
+                    self.player_dict[bet[1]]["coins"] += rewards.pop(0)
+                else:
+                    self.player_dict[bet[1]]["coins"] += 1
+            else:
+                self.player_dict[bet[1]]["coins"] -= 1
+        rewards = config.BET_POINTS
+        for bet in self.loser_bets:
+            if bet[0] == loser:
+                if rewards:
+                    self.player_dict[bet[1]]["coins"] += rewards.pop(0)
+                else:
+                    self.player_dict[bet[1]]["coins"] += 1
+            else:
+                self.player_dict[bet[1]]["coins"] -= 1
+        pass
+
     def end_round(self):
         """The end of the round triggers the following
         1. Scores the tiles
@@ -65,7 +91,7 @@ class Game:
         4. Removes the bet tiles from the players hand
         5. Place the bet tiles back on the board
         """
-        self.score_turn()
+        self.score_round()
         for val in self.camel_dict.values():
             val["need_roll"] = True
         self.tiles_dict = dict()
@@ -98,14 +124,16 @@ class Game:
             moves[f"Bet Game Loser {card}"] = f"self.play_loser_card({card})"
         for camel in self.bet_tiles:
             moves[
-                f"Bet Round Winner {camel} - {camel[0]} Points"
+                f"Bet Round Winner {camel} - {self.bet_tiles[camel][0]} Points"
             ] = f"self.play_bet_tile({camel})"
         moves["Roll"] = "self.roll(roll)"
         return moves
 
     def play(self, move):
         eval(move)
-        self.state += 1  # TODO fix this
+        self.state += 1
+        if self.state > self.num_players:
+            self.state = 1
 
     def available_tiles_placements(self):
         pass
@@ -116,15 +144,15 @@ class Game:
 
     def play_winner_card(self, camel):
         self.player_dict[self.state]["winner_cards"].remove[camel]
-        self.winner_bets["camel"] = self.state
+        self.winner_bets.append((self.state, camel))
 
     def play_loser_card(self, camel):
         self.player_dict[self.state]["loser_cards"].remove[camel]
-        self.loser_bets["camel"] = self.state
+        self.loser_bets.append((self.state, camel))
 
     def play_bet_tile(self, camel):
         """
-        Need to redo this so that a player can take multiple tiles
+        Done
         """
         if self.bet_tiles[camel]:
             pop = self.bet_tiles[camel][0]
@@ -136,6 +164,8 @@ class Game:
     def roll(self, camel, roll):
         gameplay.move(self.camel_dict, self.tiles_dict, camel, roll)
         self.player_dict[self.state]["coins"] += 1
+        if self.camel_dict["camel"]["space"] > 16:
+            return None  # TODO add end game
 
     def _winner(self, camel_dict):
         """
