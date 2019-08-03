@@ -36,11 +36,15 @@ class Game:
         self.state = 1
 
     def _gen_camel_dict(self):
+        """Generates base camel dictionary
+        """
         base = {"height": None, "space": None, "need_roll": True}
         for camel in config.CAMELS:
             self.camel_dict[camel] = base
 
     def _gen_player_dict(self):
+        """Generates base player dictionary
+        """
         base = {
             "winner_cards": config.CAMELS,
             "loser_cards": config.CAMELS,
@@ -52,12 +56,17 @@ class Game:
             self.player_dict[player + 1] = base
 
     def _gen_bet_tiles(self):
+        """Generates base bet tile configuration
+        """
         base = [5, 3, 2]
         for camel in config.CAMELS:
             self.bet_tiles[camel] = base
 
     def end_game(self):
-        """
+        """Ends the game
+        1. Scores the round
+        2. Scores the winner bets
+        3. Scores the loser bets
         """
         self.score_round()
         order = list(self._winner(self.camel_dict.keys()))
@@ -117,6 +126,13 @@ class Game:
                     self.player_dict[player]["coins"] -= np.count(val)
 
     def available_moves(self):
+        """Computes all the moves that are available.
+
+        Returns
+        -------
+        list
+            Moves available to play
+        """
         moves = dict()
         for card in self.player_dict[self.state]["winner_cards"]:
             moves[f"Bet Game Winner {card}"] = f"self.play_winner_card({card})"
@@ -126,33 +142,90 @@ class Game:
             moves[
                 f"Bet Round Winner {camel} - {self.bet_tiles[camel][0]} Points"
             ] = f"self.play_bet_tile({camel})"
-        moves["Roll"] = "self.roll(roll)"
+        moves["Roll"] = "self.roll(camel, roll)"
+        if self.player_dict[self.state]["tile"]:
+            for spot in self.available_tiles_placements():
+                moves[
+                    f"Place Block Tile At {spot}"
+                ] = f"self.play_tile('block', {spot})"
+                moves[f"Place Skip Tile At {spot}"] = f"self.play_tile('skip', {spot})"
         return moves
 
     def play(self, move):
+        """Play the move and update state
+
+        Parameters
+        ----------
+        move : 'str'
+            The move to play, formatted as a function
+        """
         eval(move)
         self.state += 1
         if self.state > self.num_players:
             self.state = 1
 
     def available_tiles_placements(self):
-        pass
+        """Compute the available tiles
+
+        Returns
+        -------
+        list
+            List of available spaces of tiles
+
+        """
+        blocked = []
+        for tile in self.tiles_dict.keys():
+            blocked.append(tile)
+            blocked.append(tile + 1)
+            blocked.append(tile - 1)
+        for camel in self.camel_dict.values():
+            blocked.append(camel["space"])
+        spots = list(range(1, 17))
+        spaces = [spot for spot in spots if spot not in blocked & spot > min(blocked)]
+        return spaces
 
     def play_tile(self, tile_type, space):
+        """Play a skip or block tile
+
+        Parameters
+        ----------
+        tile_type : str
+            Type of tyle, either `block` or `skip`
+        space : int
+            The space to play the tile
+        """
         self.player_dict[self.state]["tile"] = False
         self.tiles_dict[space] = {"tile_type": tile_type, "player": self.state}
 
     def play_winner_card(self, camel):
+        """Play a winner card
+
+        Parameters
+        ----------
+        camel : str
+            The camel to bet on a win
+        """
         self.player_dict[self.state]["winner_cards"].remove[camel]
         self.winner_bets.append((self.state, camel))
 
     def play_loser_card(self, camel):
+        """Play a loser card
+
+        Parameters
+        ----------
+        camel : str
+            The camel to bet on a loss
+        """
         self.player_dict[self.state]["loser_cards"].remove[camel]
         self.loser_bets.append((self.state, camel))
 
     def play_bet_tile(self, camel):
-        """
-        Done
+        """Play a bet tile
+
+        Parameters
+        ----------
+        camel : str
+            The camel to take a bet tile for
         """
         if self.bet_tiles[camel]:
             pop = self.bet_tiles[camel][0]
@@ -162,10 +235,19 @@ class Game:
             self.bet_tiles.pop(camel, None)
 
     def roll(self, camel, roll):
+        """Moves the camel and updates scores based on a roll
+
+        Parameters
+        ----------
+        camel : str
+            Camel that is rolled
+        roll : int
+            The number that is rolled
+        """
         gameplay.move(self.camel_dict, self.tiles_dict, camel, roll)
         self.player_dict[self.state]["coins"] += 1
         if self.camel_dict["camel"]["space"] > 16:
-            return None  # TODO add end game
+            self.end_game()
 
     def _winner(self, camel_dict):
         """
