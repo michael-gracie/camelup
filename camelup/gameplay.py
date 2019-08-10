@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+
+"""Module with basic gameplay"""
+
+
 import logging as logging
 
 
