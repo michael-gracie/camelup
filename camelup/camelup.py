@@ -103,7 +103,7 @@ class Game:
         for val in self.camel_dict.values():
             val["need_roll"] = True
         self.tiles_dict = dict()
-        for value in self.player_dict.values():
+        for val in self.player_dict.values():
             val["tile"] = True
             val["bet_tiles"] = dict()
         self._gen_bet_tiles()
@@ -181,10 +181,11 @@ class Game:
         move : 'str'
             The move to play, formatted as a function
         """
-        eval(move)
+        output = eval(move)
         self.state += 1
         if self.state > self.num_players:
             self.state = 1
+        return output
 
     def play_tile(self, tile_type, space):
         """Plays a skip or block tile
