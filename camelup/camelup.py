@@ -8,7 +8,6 @@ import random
 from copy import deepcopy
 
 import numpy as np
-import pandas as pd
 
 from camelup import config, gameplay
 from camelup import utilities as util
@@ -307,26 +306,28 @@ class Game:
         """
         sim_tiles = deepcopy(tiles)
         sim_dict = deepcopy(camel_dict)
-        while True:
-            self._turn(sim_dict, sim_tiles)
+        finished = None
+        while finished is None:
+            finished = self._turn(sim_dict, sim_tiles)
             for key, value in sim_dict.items():
                 value["need_roll"] = True
             sim_tiles = {}
+        return finished
 
-    def turn_monte(self, camel_dict, tiles, iter=1000):
+    def turn_monte(self, camel_dict, tiles_dict, iter=1000):
         """
         Runs monte carlo for the turn
         """
-        result = pd.DataFrame(self.sim_turn(camel_dict, tiles), index=[0])
+        result = [*self.sim_turn(camel_dict, tiles_dict).items()]
         for i in range(iter - 1):
-            result = result.append(self._turn(camel_dict, tiles), ignore_index=True)
-        return result
+            result.extend(self.sim_turn(camel_dict, tiles_dict))
+        return np.array(result, dtype=[("camel", "U10"), ("place", float)])
 
-    def game_monte(self, camel_dict, tiles, iter=1000):
+    def game_monte(self, camel_dict, tiles_dict, iter=1000):
         """
         Runs monte carlo for the turn
         """
-        result = pd.DataFrame(self.sim_game(camel_dict, tiles), index=[0])
+        result = [*self.sim_game(camel_dict, tiles_dict).items()]
         for i in range(iter - 1):
-            result = result.append(self._turn(camel_dict, tiles), ignore_index=True)
-        return result
+            result.extend(self.sim_game(camel_dict, tiles_dict))
+        return np.array(result, dtype=[("camel", "U10"), ("place", float)])
