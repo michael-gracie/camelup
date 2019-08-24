@@ -320,7 +320,7 @@ class Game:
         """
         result = [*self.sim_turn(camel_dict, tiles_dict).items()]
         for i in range(iter - 1):
-            result.extend(self.sim_turn(camel_dict, tiles_dict))
+            result.extend([*self.sim_turn(camel_dict, tiles_dict).items()])
         return np.array(result, dtype=[("camel", "U10"), ("place", float)])
 
     def game_monte(self, camel_dict, tiles_dict, iter=1000):
@@ -329,5 +329,5 @@ class Game:
         """
         result = [*self.sim_game(camel_dict, tiles_dict).items()]
         for i in range(iter - 1):
-            result.extend(self.sim_game(camel_dict, tiles_dict))
+            result.extend([*self.sim_game(camel_dict, tiles_dict).items()])
         return np.array(result, dtype=[("camel", "U10"), ("place", float)])

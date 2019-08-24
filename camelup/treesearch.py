@@ -9,6 +9,8 @@ from operator import add
 
 import numpy as np
 
+from numpy.lib.recfunctions import append_fields
+
 from camelup import camelup
 from camelup import utilities as util
 
@@ -95,4 +97,7 @@ def bet_tiles_to_numpy(game):
 
 
 def turn_prob_numpy(game):
-    pass
+    result = game.turn_monte(game.camel_dict, game.tiles_dict, iter=1000)
+    bins, counts = np.unique(result, return_counts=True)
+    counts_array = np.array(counts, dtype=[("counts", float)])
+    return append_fields(bins, "counts", counts_array["counts"]).filled()
