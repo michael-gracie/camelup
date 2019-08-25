@@ -282,23 +282,27 @@ class Game:
         Simulates a single turn
         """
         need_roll = [key for key in sim_dict.keys() if sim_dict[key]["need_roll"]]
+        tile_points = dict()
         while need_roll:
             camel = random.choice(need_roll)
             roll = random.randint(1, 3)
             logger.info("The {0} camel rolled {1}".format(camel, roll))
-            gameplay.move(sim_dict, self.tiles_dict, camel, roll)
+            give_points = gameplay.move(sim_dict, self.tiles_dict, camel, roll)
+            if give_points:
+                tile_owner = tiles[give_points]["player"]
+                util.add_value_dict(tile_points, tile_owner, 1)
             sim_dict[camel]["need_roll"] = False
             need_roll.remove(camel)
             if sim_dict[camel]["space"] > 16:
-                return self._winner(sim_dict)
+                return self._winner(sim_dict), tile_points
+        return self._winner(sim_dict), tile_points
 
     def sim_turn(self, camel_dict, tiles):
         """
         Simulates a single turn
         """
         sim_dict = deepcopy(camel_dict)
-        self._turn(sim_dict, tiles)
-        return self._winner(sim_dict)
+        return self._turn(sim_dict, tiles)
 
     def sim_game(self, camel_dict, tiles):
         """
@@ -308,7 +312,7 @@ class Game:
         sim_dict = deepcopy(camel_dict)
         finished = None
         while finished is None:
-            finished = self._turn(sim_dict, sim_tiles)
+            finished, tile_points = self._turn(sim_dict, sim_tiles)
             for key, value in sim_dict.items():
                 value["need_roll"] = True
             sim_tiles = {}
@@ -318,10 +322,17 @@ class Game:
         """
         Runs monte carlo for the turn
         """
-        result = [*self.sim_turn(camel_dict, tiles_dict).items()]
+        winner, tile_points = self.sim_turn(camel_dict, tiles_dict)
+        winner_result = [*winner.items()]
+        tile_points_result = [*tile_points.items()]
         for i in range(iter - 1):
-            result.extend([*self.sim_turn(camel_dict, tiles_dict).items()])
-        return np.array(result, dtype=[("camel", "U10"), ("place", float)])
+            winner, tile_points = self.sim_turn(camel_dict, tiles_dict)
+            winner_result.extend([*winner.items()])
+            tile_points_result.extend([*tile_points.items()])
+        return (
+            np.array(winner_result, dtype=[("camel", "U10"), ("place", float)]),
+            np.array(tile_points_result, dtype=[("player", float), ("points", float)]),
+        )
 
     def game_monte(self, camel_dict, tiles_dict, iter=1000):
         """
