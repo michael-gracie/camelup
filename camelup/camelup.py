@@ -295,14 +295,15 @@ class Game:
             need_roll.remove(camel)
             if sim_dict[camel]["space"] > 16:
                 return self._winner(sim_dict), tile_points
-        return self._winner(sim_dict), tile_points
+        return None, tile_points
 
     def sim_turn(self, camel_dict, tiles):
         """
         Simulates a single turn
         """
         sim_dict = deepcopy(camel_dict)
-        return self._turn(sim_dict, tiles)
+        tile_points = self._turn(sim_dict, tiles)[1]
+        return self._winner(sim_dict), tile_points
 
     def sim_game(self, camel_dict, tiles):
         """
@@ -312,7 +313,7 @@ class Game:
         sim_dict = deepcopy(camel_dict)
         finished = None
         while finished is None:
-            finished, tile_points = self._turn(sim_dict, sim_tiles)
+            finished = self._turn(sim_dict, sim_tiles)[0]
             for key, value in sim_dict.items():
                 value["need_roll"] = True
             sim_tiles = {}
