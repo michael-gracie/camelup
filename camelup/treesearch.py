@@ -3,6 +3,7 @@
 """Module with tree search decisioning"""
 
 import logging
+import sys
 
 from copy import deepcopy
 from operator import add
@@ -16,11 +17,17 @@ from camelup import camelup, config
 from camelup import utilities as util
 
 
+logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+
 logger = logging.getLogger(__name__)
+
+logger.setLevel(logging.DEBUG)
 
 game = camelup.Game(3)
 
 MAX_DEPTH = 2
+
+iter = 1000
 
 
 def get_move(game):
@@ -28,7 +35,9 @@ def get_move(game):
     best_value = 0
     best_move = None
     player = game.state
-    for move in game.available_moves():
+    logger.info("Finding Best Move")
+    for move in game.available_moves().values():
+        logger.info(f"Get Move, Depth: {depth}, Move: {move}, Player: {player}")
         if value(game, move, depth, player) >= best_value:
             best_value = value(game, move, depth, player)
             best_move = move
@@ -36,24 +45,28 @@ def get_move(game):
 
 
 def value(game, move, depth, player):
-    if depth == MAX_DEPTH:
-        return calc_utility(game)[player - 1]
-    elif "roll" in move:
-        logger.info(f"Depth {depth}: Move: {move} Player: {player}")
+    logger.info(f"Value, Depth: {depth}, Move: {move}, Player: {player}")
+    if "roll" in move:
+        logger.info(f"Return Expected Value")
         return exp_value(game, depth + 1)[player - 1]
     else:
-        logger.info(f"Depth {depth}: Move: {move} Player: {player}")
+        logger.info(f"Return Max Value")
         game_branch = deepcopy(game)
         game_branch.play(move)
         return max_value(game_branch, depth + 1)[player - 1]
 
 
 def max_value(game, depth):
-    playing_player = game.state
-    values = [
-        value(game, move, depth, playing_player) for move in game.available_moves()
-    ]
-    return util.return_max_value(values, playing_player)
+    if depth == MAX_DEPTH:
+        logger.info(f"Return Utility")
+        return list(calc_utility(game, iter)["utility"].values)
+    else:
+        playing_player = game.state
+        values = [
+            value(game, move, depth, playing_player)
+            for move in game.available_moves().values()
+        ]
+        return util.return_max_value(values, playing_player - 1)
 
 
 def exp_value(game, depth):
@@ -62,17 +75,17 @@ def exp_value(game, depth):
     for key, val in game.camel_dict.items():
         if val["need_roll"]:
             for die in range(0, 3):
+                logger.info(f"Outcome for Camel: {key} And Roll: {die+1}")
                 game_branch = deepcopy(game)
-                outcome = game_branch.play(f"self.move('{key}',{die+1})")
+                outcome = game_branch.play(f"self.play_roll('{key}',{die+1})")
                 if outcome == "Done":
-                    max_value = [
-                        val["coins"] for val in game_branch.player_dict.values()
-                    ]
+                    max_val = [val["coins"] for val in game_branch.player_dict.values()]
                 else:
-                    max_value = max_value(game_branch, depth)
-                outcomes = list(map(add, outcomes, max_value))
+                    max_val = max_value(game_branch, depth)
+                outcomes = list(map(add, outcomes, max_val))
                 num_outcomes += 1
-    return outcomes / num_outcomes
+    logger.info(f"{outcomes}")
+    return list(map(lambda x: x / num_outcomes, outcomes))
 
 
 game = camelup.Game(3)
@@ -127,10 +140,16 @@ def calc_utility(game, iter):
         pd.DataFrame(game_prob_last), on="camel", how="inner"
     )
     game_first = pd.merge(
-        game_first, config.BET_SCALING, left_index=True, right_index=True
+        game_first,
+        pd.DataFrame(config.BET_SCALING, columns=["points"]),
+        left_index=True,
+        right_index=True,
     )
     game_last = pd.merge(
-        game_last, config.BET_SCALING, left_index=True, right_index=True
+        game_last,
+        pd.DataFrame(config.BET_SCALING, columns=["points"]),
+        left_index=True,
+        right_index=True,
     )
     game_winner_other = pd.DataFrame(winner_bets).merge(
         pd.DataFrame(game_prob_other), on="camel", how="inner"
@@ -192,9 +211,10 @@ def bet_tiles_to_numpy(game):
 
 
 def create_prob_array(result, iter):
-    bins, counts = np.unique(result, return_counts=True)
+    bins, counts = np.unique(result["camel"], return_counts=True)
     counts_array = np.array(counts, dtype=[("counts", float)])
     result_array = append_fields(bins, "counts", counts_array["counts"], usemask=False)
+    result_array.dtype.names = ("camel", "counts")
     prob_array = np.array(result_array["counts"] / iter, dtype=[("prob", float)])
     return append_fields(result_array, "prob", prob_array["prob"], usemask=False)
 

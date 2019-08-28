@@ -132,13 +132,13 @@ class Game:
         """
         moves = dict()
         for card in self.player_dict[self.state]["game_cards"]:
-            moves[f"Bet Game Winner {card}"] = f"self.play_winner_card({card})"
+            moves[f"Bet Game Winner {card}"] = f"self.play_winner_card('{card}')"
         for card in self.player_dict[self.state]["game_cards"]:
-            moves[f"Bet Game Loser {card}"] = f"self.play_loser_card({card})"
+            moves[f"Bet Game Loser {card}"] = f"self.play_loser_card('{card}')"
         for camel in self.bet_tiles:
             moves[
                 f"Bet Round Winner {camel} - {self.bet_tiles[camel][0]} Points"
-            ] = f"self.play_bet_tile({camel})"
+            ] = f"self.play_bet_tile('{camel}')"
         moves["Roll"] = "self.play_roll(camel, roll)"
         if self.player_dict[self.state]["tile"]:
             for spot in self.available_tile_placements():
@@ -259,9 +259,9 @@ class Game:
         self.player_dict[self.state]["coins"] += 1
         self.camel_dict[camel]["need_roll"] = False
         if self.camel_dict[camel]["space"] > 16:
-            self.end_game()
+            return self.end_game()
         if any([val["need_roll"] for val in self.camel_dict.values()]) is False:
-            self.end_round()
+            return self.end_round()
 
     def _winner(self, camel_dict):
         """
@@ -287,7 +287,7 @@ class Game:
             camel = random.choice(need_roll)
             roll = random.randint(1, 3)
             logger.info("The {0} camel rolled {1}".format(camel, roll))
-            give_points = gameplay.move(sim_dict, self.tiles_dict, camel, roll)
+            give_points = gameplay.move(sim_dict, tiles, camel, roll)
             if give_points:
                 tile_owner = tiles[give_points]["player"]
                 util.add_value_dict(tile_points, tile_owner, 1)
