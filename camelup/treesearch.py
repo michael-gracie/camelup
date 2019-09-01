@@ -29,6 +29,8 @@ MAX_DEPTH = 2
 
 iter = 1000
 
+game_time = []
+
 
 def get_move(game):
     depth = 1
