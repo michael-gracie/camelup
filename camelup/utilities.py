@@ -6,6 +6,8 @@ from io import StringIO
 
 import numpy as np
 
+from numpy.lib.recfunctions import append_fields
+
 
 def parse_dump(string):
     """Gets information from the AST dump and return the AST object and the id
@@ -59,6 +61,11 @@ def create_benchmark_func(tree, performance):
     tree.body[0].body = new_first_layer
     tree.body[0].name = f"benchmark_{tree.body[0].name}"
     return tree
+
+
+def add_col_np(df, target_col, array):
+    df = append_fields(df, target_col, array, "<f8", usemask=False)
+    return df
 
 
 def benchmark(func, iteration, *args, **kwargs):
@@ -139,6 +146,34 @@ def numpy_group_by_sum(array, index, sum_col):
     for group in unique_groups:
         sums.append((group, array[array[index] == group][sum_col].sum()))
     return np.array(sums, dtype=[(f"{index}", float), (f"{sum_col}", float)])
+
+
+def numpy_left_join(df1, df2, key):
+    """
+    Basic left join, return left join of 2 dataframe, duplicates allowing in df1. Only one key allowed
+    """
+    df2_descr = list(filter(lambda x: x[0] != key, df2.dtype.descr))
+    new_df_dtype = np.dtype(list(set(df1.dtype.descr + df2_descr)))
+    new_df = np.zeros(df1.shape, dtype=new_df_dtype)
+    for col in df1.dtype.names:
+        new_df[col] = df1[col]
+    for new_row in new_df:
+        for row in df2:
+            if row[key] == new_row[key]:
+                for col in df2.dtype.names:
+                    new_row[col] = row[col]
+                next
+    return new_df
+
+
+def rename_np(df, columns, suffix):
+    names = ()
+    for col in df.dtype.names:
+        if col in columns:
+            names += (f"{col}_{suffix}",)
+        else:
+            names += (col,)
+    df.dtype.names = names
 
 
 def return_max_value(lst, index):

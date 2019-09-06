@@ -331,7 +331,7 @@ class Game:
             winner_result.extend([*winner.items()])
             tile_points_result.extend([*tile_points.items()])
         return (
-            np.array(winner_result, dtype=[("camel", "U10"), ("place", float)]),
+            np.array(winner_result, dtype=[("camel", "U6"), ("place", float)]),
             np.array(tile_points_result, dtype=[("player", float), ("points", float)]),
         )
 
@@ -342,4 +342,4 @@ class Game:
         result = [*self.sim_game(camel_dict, tiles_dict).items()]
         for i in range(iter - 1):
             result.extend([*self.sim_game(camel_dict, tiles_dict).items()])
-        return np.array(result, dtype=[("camel", "U10"), ("place", float)])
+        return np.array(result, dtype=[("camel", "U6"), ("place", float)])

@@ -181,8 +181,78 @@ def calc_utility(game, iter):
     return final
 
 
+def calc_utility_np(game):
+    coins = coins_to_numpy(game)
+    turn_prob_first, turn_prob_second, turn_prob_other, exp_tile_points = turn_prob_numpy(
+        game, iter
+    )
+    game_prob_first, game_prob_last, game_prob_other = game_prob_numpy(game, iter)
+    winner_bets, loser_bets = winner_loser_bets_to_numpy(game)
+    bet_tiles = bet_tiles_to_numpy(game)
+    util.rename_np(turn_prob_first, ["counts", "prob"], "first")
+    util.rename_np(turn_prob_second, ["counts", "prob"], "second")
+    util.rename_np(turn_prob_other, ["counts", "prob"], "other")
+    bets = util.numpy_left_join(bet_tiles, turn_prob_first, "camel")
+    bets = util.numpy_left_join(bets, turn_prob_second, "camel")
+    bets = util.numpy_left_join(bets, turn_prob_other, "camel")
+    multiply_array = (
+        (bets["value"] * bets["prob_first"])
+        + (bets["bets"] * bets["prob_second"])
+        - (bets["bets"] * bets["prob_other"])
+    )
+    bets = util.add_col_np(bets, "exp_value", multiply_array)
+    bets_groupby = util.numpy_group_by_sum(bets, "player", "exp_value")
+    final = util.numpy_left_join(coins, exp_tile_points, "player")
+    final = util.numpy_left_join(final, bets_groupby, "player")
+    game_first = util.numpy_left_join(winner_bets, game_prob_first, "camel")
+    game_last = util.numpy_left_join(loser_bets, game_prob_last, "camel")
+    game_winner_other = util.numpy_left_join(winner_bets, game_prob_other, "camel")
+    game_loser_other = util.numpy_left_join(loser_bets, game_prob_other, "camel")
+    game_first = util.add_col_np(
+        game_first, "points", config.BET_SCALING[0 : game_first.shape[0]]
+    )
+    game_last = util.add_col_np(
+        game_last, "points", config.BET_SCALING[0 : game_last.shape[0]]
+    )
+    game_winner_other = util.add_col_np(
+        game_winner_other, "points", [1] * game_winner_other.shape[0]
+    )
+    game_loser_other = util.add_col_np(
+        game_loser_other, "points", [1] * game_loser_other.shape[0]
+    )
+    final = util.numpy_left_join(
+        final, calc_exp_value_np(game_first, "exp_value_first"), "player"
+    )
+    final = util.numpy_left_join(
+        final, calc_exp_value_np(game_last, "exp_value_last"), "player"
+    )
+    final = util.numpy_left_join(
+        final, calc_exp_value_np(game_winner_other, "exp_value_winner_other"), "player"
+    )
+    final = util.numpy_left_join(
+        final, calc_exp_value_np(game_loser_other, "exp_value_loser_other"), "player"
+    )
+    multiply_array = (
+        final["coins"]
+        + final["points"]
+        + final["exp_value"]
+        + final["exp_value_first"]
+        + final["exp_value_last"]
+        - final["exp_value_winner_other"]
+        - final["exp_value_loser_other"]
+    )
+    final = util.add_col_np(final, "utility", multiply_array)
+    return final
+
+
 def calc_exp_value(df):
     df["exp_value"] = df["prob"] * df["points"]
+
+
+def calc_exp_value_np(df, exp_value):
+    multiply_array = df["prob"] * df["points"]
+    df = util.add_col_np(df, exp_value, multiply_array)
+    return util.numpy_group_by_sum(df, "player", exp_value)
 
 
 def game_merge_to_final(final_df, game_df, suffix):
@@ -208,7 +278,7 @@ def bet_tiles_to_numpy(game):
             for key in [*game.player_dict.items()]
             for camel in [*key[1]["bet_tiles"].items()]
         ],
-        dtype=[("player", float), ("camel", "U10"), ("value", float), ("bets", float)],
+        dtype=[("player", float), ("camel", "U6"), ("value", float), ("bets", float)],
     )
 
 
@@ -244,8 +314,6 @@ def game_prob_numpy(game, iter):
 
 
 def winner_loser_bets_to_numpy(game):
-    winner_bets = np.array(
-        game.winner_bets, dtype=[("player", float), ("camel", "U10")]
-    )
-    loser_bets = np.array(game.loser_bets, dtype=[("player", float), ("camel", "U10")])
+    winner_bets = np.array(game.winner_bets, dtype=[("player", float), ("camel", "U6")])
+    loser_bets = np.array(game.loser_bets, dtype=[("player", float), ("camel", "U6")])
     return winner_bets, loser_bets
