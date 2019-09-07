@@ -148,6 +148,40 @@ class Game:
                 moves[f"Place Skip Tile At {spot}"] = f"self.play_tile('skip', {spot})"
         return moves
 
+    def available_moves_pruned(self):
+        """Computes all the moves that are available, pruned for only moves that make sense.
+
+        Can only bet on the top 2 and bottom the camels for the game.
+        Can't place tiles that go past the farthest camel by 3 spaces.
+        Can only bet on the top 3 camels for the turn
+
+        Returns
+        -------
+        list
+            Moves available to play
+        """
+        moves = dict()
+        order = [*self._winner(self.camel_dict).keys()]
+        for card in self.player_dict[self.state]["game_cards"]:
+            if card in order[:2]:
+                moves[f"Bet Game Winner {card}"] = f"self.play_winner_card('{card}')"
+        for card in self.player_dict[self.state]["game_cards"]:
+            if card in order[-2:]:
+                moves[f"Bet Game Loser {card}"] = f"self.play_loser_card('{card}')"
+        for camel in self.bet_tiles:
+            if camel in order[0:3]:
+                moves[
+                    f"Bet Round Winner {camel} - {self.bet_tiles[camel][0]} Points"
+                ] = f"self.play_bet_tile('{camel}')"
+        moves["Roll"] = "self.play_roll(camel, roll)"
+        if self.player_dict[self.state]["tile"]:
+            for spot in self.available_tile_placements_pruned():
+                moves[
+                    f"Place Block Tile At {spot}"
+                ] = f"self.play_tile('block', {spot})"
+                moves[f"Place Skip Tile At {spot}"] = f"self.play_tile('skip', {spot})"
+        return moves
+
     def available_tile_placements(self):
         """Compute the available tiles
 
@@ -167,6 +201,32 @@ class Game:
         spots = list(range(1, 17))
         spaces = [
             spot for spot in spots if (spot not in blocked) & (spot > min(blocked))
+        ]
+        return spaces
+
+    def available_tile_placements_pruned(self):
+        """Compute the available tiles
+
+        Returns
+        -------
+        list
+            List of available spaces of tiles
+
+        """
+        blocked = []
+        for tile in self.tiles_dict.keys():
+            blocked.append(tile)
+            blocked.append(tile + 1)
+            blocked.append(tile - 1)
+        for camel in self.camel_dict.values():
+            blocked.append(camel["space"])
+        spots = list(range(1, 17))
+        spaces = [
+            spot
+            for spot in spots
+            if (spot not in blocked)
+            & (spot > min(blocked))
+            & (spot <= max(blocked) + 3)
         ]
         return spaces
 

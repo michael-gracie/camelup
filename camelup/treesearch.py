@@ -27,7 +27,7 @@ game = camelup.Game(3)
 
 MAX_DEPTH = 2
 
-iter = 1000
+iter = 400
 
 game_time = []
 
@@ -38,7 +38,7 @@ def get_move(game):
     best_move = None
     player = game.state
     logger.info("Finding Best Move")
-    for move in game.available_moves().values():
+    for move in game.available_moves_pruned().values():
         logger.info(f"Get Move, Depth: {depth}, Move: {move}, Player: {player}")
         if value(game, move, depth, player) >= best_value:
             best_value = value(game, move, depth, player)
@@ -61,12 +61,12 @@ def value(game, move, depth, player):
 def max_value(game, depth):
     if depth == MAX_DEPTH:
         logger.info(f"Return Utility")
-        return list(calc_utility(game, iter)["utility"].values)
+        return list(calc_utility_np(game, iter)["utility"])
     else:
         playing_player = game.state
         values = [
             value(game, move, depth, playing_player)
-            for move in game.available_moves().values()
+            for move in game.available_moves_pruned().values()
         ]
         return util.return_max_value(values, playing_player - 1)
 
@@ -108,80 +108,7 @@ game.play_bet_tile("blue")
 game.play_winner_card("green")
 
 
-def calc_utility(game, iter):
-    coins = coins_to_numpy(game)
-    turn_prob_first, turn_prob_second, turn_prob_other, exp_tile_points = turn_prob_numpy(
-        game, iter
-    )
-    game_prob_first, game_prob_last, game_prob_other = game_prob_numpy(game, iter)
-    winner_bets, loser_bets = winner_loser_bets_to_numpy(game)
-    bet_tiles = bet_tiles_to_numpy(game)
-    bets = pd.DataFrame(bet_tiles).merge(
-        pd.DataFrame(turn_prob_first), on="camel", how="left", suffixes=("", "_first")
-    )
-    bets = bets.merge(
-        pd.DataFrame(turn_prob_second), on="camel", how="left", suffixes=("", "_second")
-    )
-    bets = bets.merge(
-        pd.DataFrame(turn_prob_other), on="camel", how="left", suffixes=("", "_other")
-    )
-    bets["exp_value"] = (
-        bets["value"] * bets["prob"]
-        + bets["bets"] * bets["prob_second"]
-        - bets["bets"] * bets["prob_other"]
-    )
-    bets_groupby = bets.groupby("player")["exp_value"].sum().reset_index()
-    final = pd.DataFrame(coins).merge(
-        pd.DataFrame(exp_tile_points), on="player", how="left"
-    )
-    final = final.merge(bets_groupby, on="player", how="left")
-    game_first = pd.DataFrame(winner_bets).merge(
-        pd.DataFrame(game_prob_first), on="camel", how="inner"
-    )
-    game_last = pd.DataFrame(loser_bets).merge(
-        pd.DataFrame(game_prob_last), on="camel", how="inner"
-    )
-    game_first = pd.merge(
-        game_first,
-        pd.DataFrame(config.BET_SCALING, columns=["points"]),
-        left_index=True,
-        right_index=True,
-    )
-    game_last = pd.merge(
-        game_last,
-        pd.DataFrame(config.BET_SCALING, columns=["points"]),
-        left_index=True,
-        right_index=True,
-    )
-    game_winner_other = pd.DataFrame(winner_bets).merge(
-        pd.DataFrame(game_prob_other), on="camel", how="inner"
-    )
-    game_loser_other = pd.DataFrame(loser_bets).merge(
-        pd.DataFrame(game_prob_other), on="camel", how="inner"
-    )
-    game_winner_other["points"] = 1
-    game_loser_other["points"] = 1
-    calc_exp_value(game_first), calc_exp_value(game_last), calc_exp_value(
-        game_winner_other
-    ), calc_exp_value(game_loser_other)
-    final = game_merge_to_final(final, game_first, "first")
-    final = game_merge_to_final(final, game_last, "last")
-    final = game_merge_to_final(final, game_winner_other, "winner_other")
-    final = game_merge_to_final(final, game_loser_other, "loser_other")
-    final.fillna(0, inplace=True)
-    final["utility"] = (
-        final["coins"]
-        + final["points"]
-        + final["exp_value"]
-        + final["exp_value_first"]
-        + final["exp_value_last"]
-        - final["exp_value_winner_other"]
-        - final["exp_value_loser_other"]
-    )
-    return final
-
-
-def calc_utility_np(game):
+def calc_utility_np(game, iter):
     coins = coins_to_numpy(game)
     turn_prob_first, turn_prob_second, turn_prob_other, exp_tile_points = turn_prob_numpy(
         game, iter
@@ -234,7 +161,7 @@ def calc_utility_np(game):
     )
     multiply_array = (
         final["coins"]
-        + final["points"]
+        + final["exp_points"]
         + final["exp_value"]
         + final["exp_value_first"]
         + final["exp_value_last"]
@@ -245,23 +172,10 @@ def calc_utility_np(game):
     return final
 
 
-def calc_exp_value(df):
-    df["exp_value"] = df["prob"] * df["points"]
-
-
 def calc_exp_value_np(df, exp_value):
     multiply_array = df["prob"] * df["points"]
     df = util.add_col_np(df, exp_value, multiply_array)
     return util.numpy_group_by_sum(df, "player", exp_value)
-
-
-def game_merge_to_final(final_df, game_df, suffix):
-    return final_df.merge(
-        game_df.groupby("player")["exp_value"].sum().reset_index(),
-        on="player",
-        how="left",
-        suffixes=("", f"_{suffix}"),
-    )
 
 
 def coins_to_numpy(game):
@@ -299,6 +213,8 @@ def turn_prob_numpy(game, iter):
     prob_second = create_prob_array(winner_result[winner_result["place"] == 2], iter)
     prob_other = create_prob_array(winner_result[winner_result["place"] > 2], iter)
     exp_tile_points = util.numpy_group_by_sum(tile_points_result, "player", "points")
+    multiply_array = exp_tile_points["points"] / iter
+    exp_tile_points = util.add_col_np(exp_tile_points, "exp_points", multiply_array)
     return prob_first, prob_second, prob_other, exp_tile_points
 
 
