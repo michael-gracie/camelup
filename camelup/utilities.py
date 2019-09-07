@@ -64,6 +64,23 @@ def create_benchmark_func(tree, performance):
 
 
 def add_col_np(df, target_col, array):
+    """Add column to np array
+
+    Parameters
+    ----------
+    df : array
+        Numpy array
+    target_col : str
+        Column to create
+    array : array
+        Array to add as column
+
+    Returns
+    -------
+    array
+        Numpy array
+
+    """
     df = append_fields(df, target_col, array, "<f8", usemask=False)
     return df
 
@@ -141,6 +158,23 @@ def add_value_dict(dct, key, value):
 
 
 def numpy_group_by_sum(array, index, sum_col):
+    """Do a group by for a numpy array
+
+    Parameters
+    ----------
+    array : array
+        Numpy array
+    index : str
+        Column to group by
+    sum_col : str
+        Column to sum
+
+    Returns
+    -------
+    array
+        Numpy array
+
+    """
     unique_groups = np.unique(array[index])
     sums = []
     for group in unique_groups:
@@ -149,8 +183,22 @@ def numpy_group_by_sum(array, index, sum_col):
 
 
 def numpy_left_join(df1, df2, key):
-    """
-    Basic left join, return left join of 2 dataframe, duplicates allowing in df1. Only one key allowed
+    """Basic left join, return left join of 2 dataframe, duplicates allowing in df1. Only one key allowed
+
+    Parameters
+    ----------
+    df1 : array
+        Left array
+    df2 : array
+        Right array
+    key : str
+        Key to join on
+
+    Returns
+    -------
+    array
+        Numpy array
+
     """
     df2_descr = list(filter(lambda x: x[0] != key, df2.dtype.descr))
     new_df_dtype = np.dtype(list(set(df1.dtype.descr + df2_descr)))
@@ -167,6 +215,23 @@ def numpy_left_join(df1, df2, key):
 
 
 def rename_np(df, columns, suffix):
+    """Rename a column for numpy array adding a suffix
+
+    Parameters
+    ----------
+    df : array
+        Numpy array
+    columns : list
+        Columns to rename
+    suffix : str
+        Suffix to rename them with
+
+    Returns
+    -------
+    array
+        Numpy array
+
+    """
     names = ()
     for col in df.dtype.names:
         if col in columns:

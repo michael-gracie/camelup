@@ -17,61 +17,124 @@ from camelup import camelup, config
 from camelup import utilities as util
 
 
-logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
-
 logger = logging.getLogger(__name__)
-
-logger.setLevel(logging.DEBUG)
-
-game = camelup.Game(3)
-
-MAX_DEPTH = 2
 
 iter = 400
 
-game_time = []
+CACHE = dict()
 
 
-def get_move(game):
-    depth = 1
+def get_move(game, MAX_DEPTH=1):
+    """Recommends the most optimal move
+
+    Parameters
+    ----------
+    game : camel up game
+        Camel up game class
+    MAX_DEPTH : int
+        Depth of tree to be built, 1 is recommended for performance considerations
+
+    Returns
+    -------
+    dict
+        Dictionary of move and their corresponding expected value in coins
+
+    """
+    depth = 0
     best_value = 0
     best_move = None
     player = game.state
     logger.info("Finding Best Move")
+    results = dict()
     for move in game.available_moves_pruned().values():
         logger.info(f"Get Move, Depth: {depth}, Move: {move}, Player: {player}")
-        if value(game, move, depth, player) >= best_value:
-            best_value = value(game, move, depth, player)
-            best_move = move
-    return best_move, best_value
+        val = value(game, move, depth, player, MAX_DEPTH)[player - 1]
+        results[move] = val
+    return results
 
 
-def value(game, move, depth, player):
+def value(game, move, depth, player, MAX_DEPTH):
+    """Value function for recursive multi agent utility
+
+    Parameters
+    ----------
+    game : camel up game
+        Camel up game class
+    move : str
+        The move that is being assessed for value
+    depth : int
+        The current depth in the tree
+    player : int
+        The current player in the tree
+    MAX_DEPTH : int
+        Depth of tree to be built, 1 is recommended for performance considerations
+
+    Returns
+    -------
+    list
+        The value of the move for all players
+
+    """
     logger.info(f"Value, Depth: {depth}, Move: {move}, Player: {player}")
     if "roll" in move:
         logger.info(f"Return Expected Value")
-        return exp_value(game, depth + 1)[player - 1]
+        return exp_value(game, depth + 1, MAX_DEPTH)
     else:
         logger.info(f"Return Max Value")
         game_branch = deepcopy(game)
         game_branch.play(move)
-        return max_value(game_branch, depth + 1)[player - 1]
+        return max_value(game_branch, depth + 1, MAX_DEPTH)
 
 
-def max_value(game, depth):
+def max_value(game, depth, MAX_DEPTH):
+    """Calculate the max value from all possible plays
+
+    Parameters
+    ----------
+    game : camel up game
+        Camel up game class
+    depth : int
+        The current depth in the tree
+    MAX_DEPTH : int
+        Depth of tree to be built, 1 is recommended for performance considerations
+
+    Returns
+    -------
+    list
+        Utilities of the play with the max value
+
+    """
     if depth == MAX_DEPTH:
         logger.info(f"Return Utility")
         return list(calc_utility_np(game, iter)["utility"])
     else:
         playing_player = game.state
         values = [
-            value(game, move, depth, playing_player)
+            value(game, move, depth, playing_player, MAX_DEPTH)
             for move in game.available_moves_pruned().values()
         ]
+        print(values)
         return util.return_max_value(values, playing_player - 1)
 
 
-def exp_value(game, depth):
+def exp_value(game, depth, MAX_DEPTH):
+    """Calculate the expected value from a roll play
+
+    Parameters
+    ----------
+    game : camel up game
+        Camel up game class
+    depth : int
+        The current depth in the tree
+    MAX_DEPTH : int
+        Depth of tree to be built, 1 is recommended for performance considerations
+
+    Returns
+    -------
+    list
+        Utilities of the expected value of the play
+
+    """
     outcomes = [0] * game.num_players
     num_outcomes = 0
     for key, val in game.camel_dict.items():
@@ -83,37 +146,46 @@ def exp_value(game, depth):
                 if outcome == "Done":
                     max_val = [val["coins"] for val in game_branch.player_dict.values()]
                 else:
-                    max_val = max_value(game_branch, depth)
+                    max_val = max_value(game_branch, depth, MAX_DEPTH)
                 outcomes = list(map(add, outcomes, max_val))
                 num_outcomes += 1
     logger.info(f"{outcomes}")
     return list(map(lambda x: x / num_outcomes, outcomes))
 
 
-game = camelup.Game(3)
-
-camel_dict = {
-    "red": {"height": 1, "space": 1, "need_roll": True},
-    "blue": {"height": 2, "space": 1, "need_roll": True},
-    "green": {"height": 1, "space": 2, "need_roll": True},
-}
-game.camel_dict = camel_dict
-
-game.play_winner_card("blue")
-game.play_loser_card("red")
-game.play_bet_tile("blue")
-
-game.state = 2
-game.play_bet_tile("blue")
-game.play_winner_card("green")
-
-
 def calc_utility_np(game, iter):
+    """Calc utility of current position
+
+    Parameters
+    ----------
+    game : camel up game
+        Camel up game class
+    iter : int
+        Iterations to run the monte carlo simulations
+
+    Returns
+    -------
+    np.array
+        Numpy structured array with expected utilities
+
+    """
     coins = coins_to_numpy(game)
-    turn_prob_first, turn_prob_second, turn_prob_other, exp_tile_points = turn_prob_numpy(
-        game, iter
-    )
-    game_prob_first, game_prob_last, game_prob_other = game_prob_numpy(game, iter)
+    if str(game.camel_dict) + str(game.tiles_dict) in CACHE.keys():
+        turn_prob_first, turn_prob_second, turn_prob_other, exp_tile_points = CACHE[
+            str(game.camel_dict) + str(game.tiles_dict)
+        ][0]
+        game_prob_first, game_prob_last, game_prob_other = CACHE[
+            str(game.camel_dict) + str(game.tiles_dict)
+        ][1]
+    else:
+        turn_prob_first, turn_prob_second, turn_prob_other, exp_tile_points = turn_prob_numpy(
+            game, iter
+        )
+        game_prob_first, game_prob_last, game_prob_other = game_prob_numpy(game, iter)
+        CACHE[str(game.camel_dict) + str(game.tiles_dict)] = [
+            (turn_prob_first, turn_prob_second, turn_prob_other, exp_tile_points),
+            (game_prob_first, game_prob_last, game_prob_other),
+        ]
     winner_bets, loser_bets = winner_loser_bets_to_numpy(game)
     bet_tiles = bet_tiles_to_numpy(game)
     util.rename_np(turn_prob_first, ["counts", "prob"], "first")
@@ -173,12 +245,40 @@ def calc_utility_np(game, iter):
 
 
 def calc_exp_value_np(df, exp_value):
+    """Calculat the expected value based on the probability and points given
+
+    Parameters
+    ----------
+    df : array
+        Numpy array
+    exp_value :
+        Name of column for expected value
+
+    Returns
+    -------
+    array
+        Modified numpy array
+
+    """
     multiply_array = df["prob"] * df["points"]
     df = util.add_col_np(df, exp_value, multiply_array)
     return util.numpy_group_by_sum(df, "player", exp_value)
 
 
 def coins_to_numpy(game):
+    """Game coins info to numpy array
+
+    Parameters
+    ----------
+    game : camel up game
+        Camel up game class
+
+    Returns
+    -------
+    array
+        Numpy array
+
+    """
     return np.array(
         [(key[0], key[1]["coins"]) for key in [*game.player_dict.items()]],
         dtype=[("player", float), ("coins", float)],
@@ -186,6 +286,19 @@ def coins_to_numpy(game):
 
 
 def bet_tiles_to_numpy(game):
+    """Bet tiles to numpy array
+
+    Parameters
+    ----------
+    game : camel up game
+        Camel up game class
+
+    Returns
+    -------
+    array
+        Numpy array
+
+    """
     return np.array(
         [
             (key[0], camel[0], sum(camel[1]), len(camel[1]))
@@ -197,6 +310,21 @@ def bet_tiles_to_numpy(game):
 
 
 def create_prob_array(result, iter):
+    """Create probility from monte carlo results
+
+    Parameters
+    ----------
+    result : array
+        Array with monte carlo results
+    iter : int
+        Number of simulation iterations
+
+    Returns
+    -------
+    array
+        Numpy array
+
+    """
     bins, counts = np.unique(result["camel"], return_counts=True)
     counts_array = np.array(counts, dtype=[("counts", float)])
     result_array = append_fields(bins, "counts", counts_array["counts"], usemask=False)
@@ -206,6 +334,21 @@ def create_prob_array(result, iter):
 
 
 def turn_prob_numpy(game, iter):
+    """Create turn probability arrays
+
+    Parameters
+    ----------
+    game : camel up game
+        Camel up game class
+    iter : int
+        Number of simulation iterations
+
+    Returns
+    -------
+    array
+        Numpy array
+
+    """
     winner_result, tile_points_result = game.turn_monte(
         game.camel_dict, game.tiles_dict, iter=iter
     )
@@ -219,6 +362,21 @@ def turn_prob_numpy(game, iter):
 
 
 def game_prob_numpy(game, iter):
+    """Create game probability arrays
+
+    Parameters
+    ----------
+    game : camel up game
+        Camel up game class
+    iter : int
+        Number of simulation iterations
+
+    Returns
+    -------
+    array
+        Numpy array
+
+    """
     result = game.game_monte(game.camel_dict, game.tiles_dict, iter=iter)
     loser_place = max(result["place"])
     prob_first = create_prob_array(result[result["place"] == 1], iter)
@@ -230,6 +388,19 @@ def game_prob_numpy(game, iter):
 
 
 def winner_loser_bets_to_numpy(game):
+    """Create numpy array for game bets
+
+    Parameters
+    ----------
+    game : camel up game
+        Camel up game class
+
+    Returns
+    -------
+    array
+        Numpy array
+
+    """
     winner_bets = np.array(game.winner_bets, dtype=[("player", float), ("camel", "U6")])
     loser_bets = np.array(game.loser_bets, dtype=[("player", float), ("camel", "U6")])
     return winner_bets, loser_bets
