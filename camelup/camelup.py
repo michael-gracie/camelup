@@ -49,6 +49,7 @@ class Game:
             "tile": True,
             "coins": config.COINS,
             "bet_tiles": dict(),
+            "name": "",
         }
         for player in range(self.num_players):
             self.player_dict[player + 1] = deepcopy(base)
