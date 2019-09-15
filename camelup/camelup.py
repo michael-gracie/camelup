@@ -61,6 +61,26 @@ class Game:
         for camel in config.CAMELS:
             self.bet_tiles[camel] = deepcopy(base)
 
+    def gen_camel_start(self):
+        """Generates the start for the camel
+        """
+        need_place = [
+            key
+            for key in self.camel_dict.keys()
+            if self.camel_dict[key]["space"] is None
+        ]
+        while need_place:
+            camel = random.choice(need_place)
+            roll = random.randint(1, 3)
+            self.camel_dict[camel]["space"] = 0
+            self.camel_dict[camel]["height"] = 0
+            gameplay.move(self.camel_dict, self.tiles_dict, camel, roll)
+            need_place = [
+                key
+                for key in self.camel_dict.keys()
+                if self.camel_dict[key]["space"] is None
+            ]
+
     def end_game(self):
         """Ends the game
         1. Scores the round
