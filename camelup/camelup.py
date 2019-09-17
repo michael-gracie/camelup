@@ -9,8 +9,9 @@ from copy import deepcopy
 
 import numpy as np
 
-from camelup import config, gameplay
-from camelup import utilities as util
+import config
+import gameplay
+import utilities as util
 
 
 logger = logging.getLogger(__name__)
@@ -23,11 +24,12 @@ class Game:
 
     def __init__(self, num_players):
         self.num_players = num_players
+        self.tiles_dict = dict()
         self.camel_dict = dict()
         self._gen_camel_dict()
+        self._gen_camel_start()
         self.player_dict = dict()
         self._gen_player_dict()
-        self.tiles_dict = dict()
         self.bet_tiles = dict()
         self._gen_bet_tiles()
         self.winner_bets = []
@@ -61,7 +63,7 @@ class Game:
         for camel in config.CAMELS:
             self.bet_tiles[camel] = deepcopy(base)
 
-    def gen_camel_start(self):
+    def _gen_camel_start(self):
         """Generates the start for the camel
         """
         need_place = [
@@ -152,15 +154,15 @@ class Game:
             Moves available to play
         """
         moves = dict()
-        for card in self.player_dict[self.state]["game_cards"]:
-            moves[f"Bet Game Winner {card}"] = f"self.play_winner_card('{card}')"
-        for card in self.player_dict[self.state]["game_cards"]:
-            moves[f"Bet Game Loser {card}"] = f"self.play_loser_card('{card}')"
+        moves["Roll"] = "self.play_roll(camel, roll)"
         for camel in self.bet_tiles:
             moves[
                 f"Bet Round Winner {camel} - {self.bet_tiles[camel][0]} Points"
             ] = f"self.play_bet_tile('{camel}')"
-        moves["Roll"] = "self.play_roll(camel, roll)"
+        for card in self.player_dict[self.state]["game_cards"]:
+            moves[f"Bet Game Winner {card}"] = f"self.play_winner_card('{card}')"
+        for card in self.player_dict[self.state]["game_cards"]:
+            moves[f"Bet Game Loser {card}"] = f"self.play_loser_card('{card}')"
         if self.player_dict[self.state]["tile"]:
             for spot in self.available_tile_placements():
                 moves[
