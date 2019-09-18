@@ -5,12 +5,14 @@ import tkinter as tk
 
 from glob import glob
 from tkinter import ttk
+from tkinter.scrolledtext import ScrolledText
 
 from IPython.display import display
 from PIL import Image, ImageDraw, ImageFont, ImageTk
 
 import camelup
 import config
+import treesearch
 
 
 font = ImageFont.truetype("../fonts/arial.ttf", 9)
@@ -269,7 +271,8 @@ class GamePage(tk.Frame):
         self.turn_enter.grid(column=1, row=2)
 
         self.turn_info = tk.StringVar()
-        self.turn_info_label = tk.Label(self, textvariable=self.turn_info)
+        self.turn_info_label = ScrolledText(self)
+        self.turn_info_label.replace("1.0", tk.END, self.turn_info.get())
         self.turn_info_label.grid(column=1, row=3)
 
     def update(self):
@@ -299,7 +302,10 @@ class GamePage(tk.Frame):
                 .replace("camel", f"'{camel}'")
                 .replace(", roll", f", {roll}")
             )
-            self.turn_info.set(f"Camel: {camel} Rolled: {str(roll)}")
+            self.turn_info.set(
+                f"Camel: {camel} Rolled: {str(roll)}\n{self.turn_info.get()}"
+            )
+            self.turn_info_label.replace("1.0", tk.END, self.turn_info.get())
             if output == "Done":
                 self.player_turn.grid_forget()
                 self.combo.grid_forget()
@@ -321,6 +327,32 @@ class GamePage(tk.Frame):
                 return
         else:
             self.game.play(self.game.available_moves()[self.combo.get()])
+        if self.game.player_dict[self.game.state]["name"] == "Robot":
+            moves = treesearch.get_move(self.game)
+            best_move = max(moves, key=moves.get)
+            self.turn_info.set(
+                f"Robot Move: {best_move} Utility: {moves[best_move]}\n{self.turn_info.get()}"
+            )
+            self.turn_info_label.replace("1.0", tk.END, self.turn_info.get())
+            if "roll" in best_move:
+                need_roll = [
+                    key
+                    for key in self.game.camel_dict.keys()
+                    if self.game.camel_dict[key]["need_roll"]
+                ]
+                camel = random.choice(need_roll)
+                roll = random.randint(1, 3)
+                output = self.game.play(
+                    best_move.replace("camel", f"'{camel}'").replace(
+                        ", roll", f", {roll}"
+                    )
+                )
+                self.turn_info.set(
+                    f"Camel: {camel} Rolled: {str(roll)}\n{self.turn_info.get()}"
+                )
+                self.turn_info_label.replace("1.0", tk.END, self.turn_info.get())
+            else:
+                self.game.play(best_move)
         self.update()
 
 

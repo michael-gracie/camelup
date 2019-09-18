@@ -13,8 +13,9 @@ import pandas as pd
 
 from numpy.lib.recfunctions import append_fields
 
-from camelup import camelup, config
-from camelup import utilities as util
+import camelup
+import config
+import utilities as util
 
 
 logger = logging.getLogger(__name__)
