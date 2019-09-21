@@ -4,7 +4,7 @@ from copy import deepcopy
 
 import pytest
 
-from camelup import gameplay
+import camelup.gameplay as gameplay
 
 
 camel_dict = {

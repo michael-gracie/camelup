@@ -7,7 +7,7 @@ from copy import deepcopy
 
 import pytest
 
-from camelup import camelup
+import camelup.camelup as camelup
 
 
 camel_dict = {

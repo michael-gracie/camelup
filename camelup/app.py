@@ -7,15 +7,16 @@ from glob import glob
 from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
 
-from IPython.display import display
 from PIL import Image, ImageDraw, ImageFont, ImageTk
 
-import camelup
-import config
-import treesearch
+import camelup.camelup as camelup
+import camelup.config as config
+import camelup.treesearch as treesearch
 
 
-font = ImageFont.truetype("../fonts/arial.ttf", 9)
+CURR_DIR = os.path.dirname(os.path.abspath(__file__))
+
+font = ImageFont.truetype(os.path.join(CURR_DIR, "fonts/arial.ttf"), 9)
 
 
 def create_board(img, game):
@@ -187,7 +188,7 @@ def open_camel(file):
 
 picture_dict = dict()
 for camel in config.CAMELS:
-    file = glob(f"../img/*{camel}*")[0]
+    file = glob(os.path.join(CURR_DIR, f"img/*{camel}*"))[0]
     picture_dict[camel] = open_camel(file)
 
 

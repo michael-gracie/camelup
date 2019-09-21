@@ -9,9 +9,9 @@ from copy import deepcopy
 
 import numpy as np
 
-import config
-import gameplay
-import utilities as util
+import camelup.config as config
+import camelup.gameplay as gameplay
+import camelup.utilities as util
 
 
 logger = logging.getLogger(__name__)

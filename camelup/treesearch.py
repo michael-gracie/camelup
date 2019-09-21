@@ -9,13 +9,12 @@ from copy import deepcopy
 from operator import add
 
 import numpy as np
-import pandas as pd
 
 from numpy.lib.recfunctions import append_fields
 
-import camelup
-import config
-import utilities as util
+import camelup.camelup as camulup
+import camelup.config as config
+import camelup.utilities as util
 
 
 logger = logging.getLogger(__name__)

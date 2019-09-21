@@ -28,7 +28,7 @@ IGNORE_FOLDER = "test"
 ##############
 
 NAME = "camelup"
-PACKAGES = find_packages
+PACKAGES = find_packages()
 META_PATH = os.path.join("camelup", "__init__.py")
 KEYWORDS = [""]
 AUTHOR = "Michael Gracie"
@@ -49,6 +49,10 @@ CLASSIFIERS = [
 
 INSTALL_REQUIRES = []
 # if empty install for requirement.txt
+
+if not INSTALL_REQUIRES:
+    with open("requirements.txt", "r") as f:
+        INSTALL_REQUIRES = f.read().split("\n")
 
 EXTRAS_REQUIRE = {
     "docs": ["sphinx", "sphinx_rtd_theme"],
@@ -91,11 +95,11 @@ def install_pkg():
         author=AUTHOR,
         license=LICENSE,
         python_requires="~=3.7.0",
-        package=PACKAGES,
+        packages=PACKAGES,
         install_requires=INSTALL_REQUIRES,
         classifiers=CLASSIFIERS,
         extras_require=EXTRAS_REQUIRE,
-        include_package_date=True,
+        include_package_data=True,
         zip_safe=False,
         scripts=["bin/camelup"],
     )
