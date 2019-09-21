@@ -8,13 +8,15 @@ import codecs
 import distutils.cmd
 import distutils.log
 import os
-from pathlib import Path
 import re
 import subprocess
 import sys
-from setuptools import find_packages
-from setuptools import setup
+
+from pathlib import Path
 from typing import List
+
+from setuptools import find_packages, setup
+
 
 # Pylint configuration
 PYLINTRC_FILE = "pylintrc"
@@ -34,7 +36,7 @@ AUTHOR = "Michael Gracie"
 PROJECT_URLS = {
     "Documentation": "https://github.com/pages/michael-gracie/camelup/build/html/index.html",
     "Bug Tracker": "https://github.com/michael-gracie/pages/camelup/issues",
-    "Source Code": "https://github.com/michael-gracie/pages/camelup"
+    "Source Code": "https://github.com/michael-gracie/pages/camelup",
 }
 
 CLASSIFIERS = [
@@ -45,19 +47,13 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3.7",
 ]
 
-INSTALL_REQUIRES = [
-]
+INSTALL_REQUIRES = []
 # if empty install for requirement.txt
 
 EXTRAS_REQUIRE = {
     "docs": ["sphinx", "sphinx_rtd_theme"],
-    "test": [
-        "coverage",
-        "pytest",
-        "pytest-cov",
-        "pytest-pylint"
-    ],
-    "qa": ["pylint","pre-commit","black","isort"]
+    "test": ["coverage", "pytest", "pytest-cov", "pytest-pylint"],
+    "qa": ["pylint", "pre-commit", "black", "isort"],
 }
 
 EXTRAS_REQUIRE["dev"] = (
@@ -76,18 +72,21 @@ with open(os.path.join(HERE, "LICENSE"), encoding="utf-8") as file_open:
 # Installing
 ############
 
+
 def version_check():
     if sys.version_info < (3, 7):
         sys.exit("Python 3.7 required.")
 
+
 def install_pkg():
     """Setup for the package"""
 
-    setup(name=NAME,
-        description=LONG_DESCRIPTION ,
+    setup(
+        name=NAME,
+        description=LONG_DESCRIPTION,
         long_description=LONG_DESCRIPTION,
         version="0.1.0",
-        url='https://github.com/michael-gracie/camelup',
+        url="https://github.com/michael-gracie/camelup",
         project_urls=PROJECT_URLS,
         author=AUTHOR,
         license=LICENSE,
@@ -97,7 +96,10 @@ def install_pkg():
         classifiers=CLASSIFIERS,
         extras_require=EXTRAS_REQUIRE,
         include_package_date=True,
-        zip_safe=False)
+        zip_safe=False,
+        scripts=["bin/camelup"],
+    )
+
 
 if __name__ == "__main__":
     version_check()

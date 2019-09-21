@@ -19,6 +19,21 @@ font = ImageFont.truetype("../fonts/arial.ttf", 9)
 
 
 def create_board(img, game):
+    """Create the board from the base image
+
+    Parameters
+    ----------
+    img : PIL object
+        Base board to put the board onto
+    game : camelup game
+        Camel up game to visualize
+
+    Returns
+    -------
+    dict
+        Info for where the tiles were placed on the image
+
+    """
     board_info = dict()
     draw = ImageDraw.Draw(img)
     border = 5
@@ -128,6 +143,19 @@ def create_board(img, game):
 
 
 def modulo_space(space):
+    """Translate spaces greater than 16 to a space on the board
+
+    Parameters
+    ----------
+    space : int
+        Space the camel was on
+
+    Returns
+    -------
+    int
+        Space the camel will be displayed on
+
+    """
     if space % 16 == 0:
         return 16
     else:
@@ -135,6 +163,19 @@ def modulo_space(space):
 
 
 def open_camel(file):
+    """Open the camel files and put the transparceny filter on them
+
+    Parameters
+    ----------
+    file : str
+        File location
+
+    Returns
+    -------
+    object
+        PIL image object
+
+    """
     camel = Image.open(file)
     transparency = Image.new("RGBA", camel.size, (0, 0, 0, 0))
     transparency.paste(camel, (0, 0))
@@ -151,6 +192,17 @@ for camel in config.CAMELS:
 
 
 def place_camel_dict(img, game, board_info):
+    """Placing the camels on the board
+
+    Parameters
+    ----------
+    img : object
+        PIL image to put the camels on
+    game : class
+        Camelup game to visualize
+    board_info : dict
+        Dict with info about where to place tiles
+    """
     counter = 0
     border = 5
     width = (img.size[0] - border * 2) / 5
@@ -168,6 +220,17 @@ def place_camel_dict(img, game, board_info):
 
 
 def place_tiles(img, game, board_info):
+    """Place tiles on board
+
+    Parameters
+    ----------
+    img : object
+        PIL image to put the camels on
+    game : class
+        Camelup game to place
+    board_info : dict
+        Dict with info about where to place tiles
+    """
     draw = ImageDraw.Draw(img)
     for space, val in game.tiles_dict.items():
         tile = board_info[space]
@@ -187,6 +250,19 @@ def place_tiles(img, game, board_info):
 
 
 class CamelApp(tk.Tk):
+    """Top level tk app
+
+    Attributes
+    ----------
+    title : str
+        Title of app
+    game : class
+        Camelup class to visualize
+    _frame : frame
+        Current frame to show within the app
+
+    """
+
     def __init__(self):
         tk.Tk.__init__(self)
         self.title("Camel Up")
@@ -195,12 +271,16 @@ class CamelApp(tk.Tk):
         self._frame.pack()
 
     def switch_to_start(self):
+        """Switch to start frame, reset the game
+        """
         self._frame.destroy()
         self.game = camelup.Game(2)
         self._frame = StartPage(self, self.game)
         self._frame.pack()
 
     def switch_to_game(self):
+        """Switch to game frame
+        """
         self.game = self._frame.game
         self._frame.destroy()
         self._frame = GamePage(self, self.game)
@@ -209,6 +289,19 @@ class CamelApp(tk.Tk):
 
 
 class StartPage(tk.Frame):
+    """Frame for the starting page of the app
+    Attributes
+    ----------
+    names : list
+        Names of players
+    player_labels : list
+        Player labels
+    num_players : object
+        Combobox object to select players
+    game_enter : object
+        Button object to enter game
+    """
+
     def __init__(self, master, game):
         tk.Frame.__init__(self, master)
         self.master = master
@@ -224,11 +317,15 @@ class StartPage(tk.Frame):
         self.num_players.bind("<<ComboboxSelected>>", self.name_text_boxes)
 
     def destroy_start(self):
+        """Destroy the start frame
+        """
         for counter, name in enumerate(self.names):
             self.game.player_dict[counter + 1]["name"] = name.get()
         self.master.switch_to_game()
 
     def name_text_boxes(self, event):
+        """Genreate the text boxes to input names based of number of players selected
+        """
         for name in self.names:
             name.destroy()
         for label in self.player_labels:
@@ -246,6 +343,28 @@ class StartPage(tk.Frame):
 
 
 class GamePage(tk.Frame):
+    """Game frame
+
+    Attributes
+    ----------
+    img : object
+        Image of camelup game
+    board : object
+        Label that contains `img`
+    player_turn_text : object
+        Text with which player's turn it is
+    player_turn : object
+        Label that contains `player_turn_text`
+    combo : object
+        Combobox with all the potential moves
+    turn_enter : object
+        Button to enter the play
+    turn_info : object
+        Info with what happened within the turn
+    turn_info_label : type
+        Lable for `turn_info`
+    """
+
     def __init__(self, master, game):
         tk.Frame.__init__(self, master)
         self.master = master
@@ -276,6 +395,8 @@ class GamePage(tk.Frame):
         self.turn_info_label.grid(column=1, row=3)
 
     def update(self):
+        """Updates the image of the board
+        """
         self.img = Image.new("RGB", (500, 500), color=(236, 192, 81))
         self.board_info = create_board(self.img, self.game)
         place_camel_dict(self.img, self.game, self.board_info)
@@ -288,6 +409,8 @@ class GamePage(tk.Frame):
         )
 
     def play(self):
+        """Executes a play
+        """
         print(self.combo.get())
         if self.combo.get() == "Roll":
             need_roll = [
