@@ -1,0 +1,600 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>camelup.treesearch &mdash; camelup 0.1.0 documentation</title>
+
+
+
+
+
+
+
+
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+
+
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+
+
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+
+
+  <div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+            <a href="../../index.html" class="icon icon-home"> camelup
+
+
+
+          </a>
+
+
+
+
+              <div class="version">
+                0.1.0
+              </div>
+
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+
+
+
+
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">camelup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">camelup</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+      <nav class="wy-nav-top" aria-label="top navigation">
+
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">camelup</a>
+
+      </nav>
+
+
+      <div class="wy-nav-content">
+
+        <div class="rst-content">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+
+      <li>camelup.treesearch</li>
+
+
+      <li class="wy-breadcrumbs-aside">
+
+      </li>
+
+  </ul>
+
+
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for camelup.treesearch</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;Module with tree search decisioning&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="k">import</span> <span class="n">add</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">numpy.lib.recfunctions</span> <span class="k">import</span> <span class="n">append_fields</span>
+
+<span class="kn">import</span> <span class="nn">camelup.camelup</span> <span class="k">as</span> <span class="nn">camulup</span>
+<span class="kn">import</span> <span class="nn">camelup.config</span> <span class="k">as</span> <span class="nn">config</span>
+<span class="kn">import</span> <span class="nn">camelup.utilities</span> <span class="k">as</span> <span class="nn">util</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="nb">iter</span> <span class="o">=</span> <span class="mi">400</span>
+
+<span class="n">CACHE</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="get_move"><a class="viewcode-back" href="../../camelup.html#camelup.treesearch.get_move">[docs]</a><span class="k">def</span> <span class="nf">get_move</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">MAX_DEPTH</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Recommends the most optimal move</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    game : camel up game</span>
+<span class="sd">        Camel up game class</span>
+<span class="sd">    MAX_DEPTH : int</span>
+<span class="sd">        Depth of tree to be built, 1 is recommended for performance considerations</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Dictionary of move and their corresponding expected value in coins</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">best_value</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">best_move</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">player</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">state</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Finding Best Move&quot;</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">move</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">available_moves_pruned</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Get Move, Depth: </span><span class="si">{depth}</span><span class="s2">, Move: </span><span class="si">{move}</span><span class="s2">, Player: </span><span class="si">{player}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">value</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">move</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">MAX_DEPTH</span><span class="p">)[</span><span class="n">player</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">move</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+    <span class="k">return</span> <span class="n">results</span></div>
+
+
+<div class="viewcode-block" id="value"><a class="viewcode-back" href="../../camelup.html#camelup.treesearch.value">[docs]</a><span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">move</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">MAX_DEPTH</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Value function for recursive multi agent utility</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    game : camel up game</span>
+<span class="sd">        Camel up game class</span>
+<span class="sd">    move : str</span>
+<span class="sd">        The move that is being assessed for value</span>
+<span class="sd">    depth : int</span>
+<span class="sd">        The current depth in the tree</span>
+<span class="sd">    player : int</span>
+<span class="sd">        The current player in the tree</span>
+<span class="sd">    MAX_DEPTH : int</span>
+<span class="sd">        Depth of tree to be built, 1 is recommended for performance considerations</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        The value of the move for all players</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Value, Depth: </span><span class="si">{depth}</span><span class="s2">, Move: </span><span class="si">{move}</span><span class="s2">, Player: </span><span class="si">{player}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;roll&quot;</span> <span class="ow">in</span> <span class="n">move</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Return Expected Value&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">exp_value</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">MAX_DEPTH</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Return Max Value&quot;</span><span class="p">)</span>
+        <span class="n">game_branch</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">game</span><span class="p">)</span>
+        <span class="n">game_branch</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">move</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">max_value</span><span class="p">(</span><span class="n">game_branch</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">MAX_DEPTH</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="max_value"><a class="viewcode-back" href="../../camelup.html#camelup.treesearch.max_value">[docs]</a><span class="k">def</span> <span class="nf">max_value</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">MAX_DEPTH</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate the max value from all possible plays</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    game : camel up game</span>
+<span class="sd">        Camel up game class</span>
+<span class="sd">    depth : int</span>
+<span class="sd">        The current depth in the tree</span>
+<span class="sd">    MAX_DEPTH : int</span>
+<span class="sd">        Depth of tree to be built, 1 is recommended for performance considerations</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        Utilities of the play with the max value</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">depth</span> <span class="o">==</span> <span class="n">MAX_DEPTH</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Return Utility&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">calc_utility_np</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="nb">iter</span><span class="p">)[</span><span class="s2">&quot;utility&quot;</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">playing_player</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">state</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">value</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">move</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">playing_player</span><span class="p">,</span> <span class="n">MAX_DEPTH</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">move</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">available_moves_pruned</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">return_max_value</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">playing_player</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="exp_value"><a class="viewcode-back" href="../../camelup.html#camelup.treesearch.exp_value">[docs]</a><span class="k">def</span> <span class="nf">exp_value</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">MAX_DEPTH</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate the expected value from a roll play</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    game : camel up game</span>
+<span class="sd">        Camel up game class</span>
+<span class="sd">    depth : int</span>
+<span class="sd">        The current depth in the tree</span>
+<span class="sd">    MAX_DEPTH : int</span>
+<span class="sd">        Depth of tree to be built, 1 is recommended for performance considerations</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        Utilities of the expected value of the play</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">outcomes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">game</span><span class="o">.</span><span class="n">num_players</span>
+    <span class="n">num_outcomes</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">camel_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">val</span><span class="p">[</span><span class="s2">&quot;need_roll&quot;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">die</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Outcome for Camel: </span><span class="si">{key}</span><span class="s2"> And Roll: {die+1}&quot;</span><span class="p">)</span>
+                <span class="n">game_branch</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">game</span><span class="p">)</span>
+                <span class="n">outcome</span> <span class="o">=</span> <span class="n">game_branch</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;self.play_roll(&#39;</span><span class="si">{key}</span><span class="s2">&#39;,{die+1})&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">outcome</span> <span class="o">==</span> <span class="s2">&quot;Done&quot;</span><span class="p">:</span>
+                    <span class="n">max_val</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="p">[</span><span class="s2">&quot;coins&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">game_branch</span><span class="o">.</span><span class="n">player_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">max_val</span> <span class="o">=</span> <span class="n">max_value</span><span class="p">(</span><span class="n">game_branch</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">MAX_DEPTH</span><span class="p">)</span>
+                <span class="n">outcomes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">add</span><span class="p">,</span> <span class="n">outcomes</span><span class="p">,</span> <span class="n">max_val</span><span class="p">))</span>
+                <span class="n">num_outcomes</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{outcomes}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">/</span> <span class="n">num_outcomes</span><span class="p">,</span> <span class="n">outcomes</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="calc_utility_np"><a class="viewcode-back" href="../../camelup.html#camelup.treesearch.calc_utility_np">[docs]</a><span class="k">def</span> <span class="nf">calc_utility_np</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="nb">iter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calc utility of current position</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    game : camel up game</span>
+<span class="sd">        Camel up game class</span>
+<span class="sd">    iter : int</span>
+<span class="sd">        Iterations to run the monte carlo simulations</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.array</span>
+<span class="sd">        Numpy structured array with expected utilities</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">coins</span> <span class="o">=</span> <span class="n">coins_to_numpy</span><span class="p">(</span><span class="n">game</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">camel_dict</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">tiles_dict</span><span class="p">)</span> <span class="ow">in</span> <span class="n">CACHE</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">turn_prob_first</span><span class="p">,</span> <span class="n">turn_prob_second</span><span class="p">,</span> <span class="n">turn_prob_other</span><span class="p">,</span> <span class="n">exp_tile_points</span> <span class="o">=</span> <span class="n">CACHE</span><span class="p">[</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">camel_dict</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">tiles_dict</span><span class="p">)</span>
+        <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">game_prob_first</span><span class="p">,</span> <span class="n">game_prob_last</span><span class="p">,</span> <span class="n">game_prob_other</span> <span class="o">=</span> <span class="n">CACHE</span><span class="p">[</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">camel_dict</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">tiles_dict</span><span class="p">)</span>
+        <span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">turn_prob_first</span><span class="p">,</span> <span class="n">turn_prob_second</span><span class="p">,</span> <span class="n">turn_prob_other</span><span class="p">,</span> <span class="n">exp_tile_points</span> <span class="o">=</span> <span class="n">turn_prob_numpy</span><span class="p">(</span>
+            <span class="n">game</span><span class="p">,</span> <span class="nb">iter</span>
+        <span class="p">)</span>
+        <span class="n">game_prob_first</span><span class="p">,</span> <span class="n">game_prob_last</span><span class="p">,</span> <span class="n">game_prob_other</span> <span class="o">=</span> <span class="n">game_prob_numpy</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="nb">iter</span><span class="p">)</span>
+        <span class="n">CACHE</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">camel_dict</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">tiles_dict</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">turn_prob_first</span><span class="p">,</span> <span class="n">turn_prob_second</span><span class="p">,</span> <span class="n">turn_prob_other</span><span class="p">,</span> <span class="n">exp_tile_points</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">game_prob_first</span><span class="p">,</span> <span class="n">game_prob_last</span><span class="p">,</span> <span class="n">game_prob_other</span><span class="p">),</span>
+        <span class="p">]</span>
+    <span class="n">winner_bets</span><span class="p">,</span> <span class="n">loser_bets</span> <span class="o">=</span> <span class="n">winner_loser_bets_to_numpy</span><span class="p">(</span><span class="n">game</span><span class="p">)</span>
+    <span class="n">bet_tiles</span> <span class="o">=</span> <span class="n">bet_tiles_to_numpy</span><span class="p">(</span><span class="n">game</span><span class="p">)</span>
+    <span class="n">util</span><span class="o">.</span><span class="n">rename_np</span><span class="p">(</span><span class="n">turn_prob_first</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span> <span class="s2">&quot;prob&quot;</span><span class="p">],</span> <span class="s2">&quot;first&quot;</span><span class="p">)</span>
+    <span class="n">util</span><span class="o">.</span><span class="n">rename_np</span><span class="p">(</span><span class="n">turn_prob_second</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span> <span class="s2">&quot;prob&quot;</span><span class="p">],</span> <span class="s2">&quot;second&quot;</span><span class="p">)</span>
+    <span class="n">util</span><span class="o">.</span><span class="n">rename_np</span><span class="p">(</span><span class="n">turn_prob_other</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span> <span class="s2">&quot;prob&quot;</span><span class="p">],</span> <span class="s2">&quot;other&quot;</span><span class="p">)</span>
+    <span class="n">bets</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_left_join</span><span class="p">(</span><span class="n">bet_tiles</span><span class="p">,</span> <span class="n">turn_prob_first</span><span class="p">,</span> <span class="s2">&quot;camel&quot;</span><span class="p">)</span>
+    <span class="n">bets</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_left_join</span><span class="p">(</span><span class="n">bets</span><span class="p">,</span> <span class="n">turn_prob_second</span><span class="p">,</span> <span class="s2">&quot;camel&quot;</span><span class="p">)</span>
+    <span class="n">bets</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_left_join</span><span class="p">(</span><span class="n">bets</span><span class="p">,</span> <span class="n">turn_prob_other</span><span class="p">,</span> <span class="s2">&quot;camel&quot;</span><span class="p">)</span>
+    <span class="n">multiply_array</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">bets</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">bets</span><span class="p">[</span><span class="s2">&quot;prob_first&quot;</span><span class="p">])</span>
+        <span class="o">+</span> <span class="p">(</span><span class="n">bets</span><span class="p">[</span><span class="s2">&quot;bets&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">bets</span><span class="p">[</span><span class="s2">&quot;prob_second&quot;</span><span class="p">])</span>
+        <span class="o">-</span> <span class="p">(</span><span class="n">bets</span><span class="p">[</span><span class="s2">&quot;bets&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">bets</span><span class="p">[</span><span class="s2">&quot;prob_other&quot;</span><span class="p">])</span>
+    <span class="p">)</span>
+    <span class="n">bets</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">add_col_np</span><span class="p">(</span><span class="n">bets</span><span class="p">,</span> <span class="s2">&quot;exp_value&quot;</span><span class="p">,</span> <span class="n">multiply_array</span><span class="p">)</span>
+    <span class="n">bets_groupby</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_group_by_sum</span><span class="p">(</span><span class="n">bets</span><span class="p">,</span> <span class="s2">&quot;player&quot;</span><span class="p">,</span> <span class="s2">&quot;exp_value&quot;</span><span class="p">)</span>
+    <span class="n">final</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_left_join</span><span class="p">(</span><span class="n">coins</span><span class="p">,</span> <span class="n">exp_tile_points</span><span class="p">,</span> <span class="s2">&quot;player&quot;</span><span class="p">)</span>
+    <span class="n">final</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_left_join</span><span class="p">(</span><span class="n">final</span><span class="p">,</span> <span class="n">bets_groupby</span><span class="p">,</span> <span class="s2">&quot;player&quot;</span><span class="p">)</span>
+    <span class="n">game_first</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_left_join</span><span class="p">(</span><span class="n">winner_bets</span><span class="p">,</span> <span class="n">game_prob_first</span><span class="p">,</span> <span class="s2">&quot;camel&quot;</span><span class="p">)</span>
+    <span class="n">game_last</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_left_join</span><span class="p">(</span><span class="n">loser_bets</span><span class="p">,</span> <span class="n">game_prob_last</span><span class="p">,</span> <span class="s2">&quot;camel&quot;</span><span class="p">)</span>
+    <span class="n">game_winner_other</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_left_join</span><span class="p">(</span><span class="n">winner_bets</span><span class="p">,</span> <span class="n">game_prob_other</span><span class="p">,</span> <span class="s2">&quot;camel&quot;</span><span class="p">)</span>
+    <span class="n">game_loser_other</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_left_join</span><span class="p">(</span><span class="n">loser_bets</span><span class="p">,</span> <span class="n">game_prob_other</span><span class="p">,</span> <span class="s2">&quot;camel&quot;</span><span class="p">)</span>
+    <span class="n">game_first</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">add_col_np</span><span class="p">(</span>
+        <span class="n">game_first</span><span class="p">,</span> <span class="s2">&quot;points&quot;</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">BET_SCALING</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">game_first</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="p">)</span>
+    <span class="n">game_last</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">add_col_np</span><span class="p">(</span>
+        <span class="n">game_last</span><span class="p">,</span> <span class="s2">&quot;points&quot;</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">BET_SCALING</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">game_last</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="p">)</span>
+    <span class="n">game_winner_other</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">add_col_np</span><span class="p">(</span>
+        <span class="n">game_winner_other</span><span class="p">,</span> <span class="s2">&quot;points&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">game_winner_other</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">game_loser_other</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">add_col_np</span><span class="p">(</span>
+        <span class="n">game_loser_other</span><span class="p">,</span> <span class="s2">&quot;points&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">game_loser_other</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">final</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_left_join</span><span class="p">(</span>
+        <span class="n">final</span><span class="p">,</span> <span class="n">calc_exp_value_np</span><span class="p">(</span><span class="n">game_first</span><span class="p">,</span> <span class="s2">&quot;exp_value_first&quot;</span><span class="p">),</span> <span class="s2">&quot;player&quot;</span>
+    <span class="p">)</span>
+    <span class="n">final</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_left_join</span><span class="p">(</span>
+        <span class="n">final</span><span class="p">,</span> <span class="n">calc_exp_value_np</span><span class="p">(</span><span class="n">game_last</span><span class="p">,</span> <span class="s2">&quot;exp_value_last&quot;</span><span class="p">),</span> <span class="s2">&quot;player&quot;</span>
+    <span class="p">)</span>
+    <span class="n">final</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_left_join</span><span class="p">(</span>
+        <span class="n">final</span><span class="p">,</span> <span class="n">calc_exp_value_np</span><span class="p">(</span><span class="n">game_winner_other</span><span class="p">,</span> <span class="s2">&quot;exp_value_winner_other&quot;</span><span class="p">),</span> <span class="s2">&quot;player&quot;</span>
+    <span class="p">)</span>
+    <span class="n">final</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_left_join</span><span class="p">(</span>
+        <span class="n">final</span><span class="p">,</span> <span class="n">calc_exp_value_np</span><span class="p">(</span><span class="n">game_loser_other</span><span class="p">,</span> <span class="s2">&quot;exp_value_loser_other&quot;</span><span class="p">),</span> <span class="s2">&quot;player&quot;</span>
+    <span class="p">)</span>
+    <span class="n">multiply_array</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">final</span><span class="p">[</span><span class="s2">&quot;coins&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">final</span><span class="p">[</span><span class="s2">&quot;exp_points&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">final</span><span class="p">[</span><span class="s2">&quot;exp_value&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">final</span><span class="p">[</span><span class="s2">&quot;exp_value_first&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">final</span><span class="p">[</span><span class="s2">&quot;exp_value_last&quot;</span><span class="p">]</span>
+        <span class="o">-</span> <span class="n">final</span><span class="p">[</span><span class="s2">&quot;exp_value_winner_other&quot;</span><span class="p">]</span>
+        <span class="o">-</span> <span class="n">final</span><span class="p">[</span><span class="s2">&quot;exp_value_loser_other&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">final</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">add_col_np</span><span class="p">(</span><span class="n">final</span><span class="p">,</span> <span class="s2">&quot;utility&quot;</span><span class="p">,</span> <span class="n">multiply_array</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">final</span></div>
+
+
+<div class="viewcode-block" id="calc_exp_value_np"><a class="viewcode-back" href="../../camelup.html#camelup.treesearch.calc_exp_value_np">[docs]</a><span class="k">def</span> <span class="nf">calc_exp_value_np</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">exp_value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculat the expected value based on the probability and points given</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    df : array</span>
+<span class="sd">        Numpy array</span>
+<span class="sd">    exp_value :</span>
+<span class="sd">        Name of column for expected value</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    array</span>
+<span class="sd">        Modified numpy array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">multiply_array</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;prob&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;points&quot;</span><span class="p">]</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">add_col_np</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">exp_value</span><span class="p">,</span> <span class="n">multiply_array</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_group_by_sum</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s2">&quot;player&quot;</span><span class="p">,</span> <span class="n">exp_value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="coins_to_numpy"><a class="viewcode-back" href="../../camelup.html#camelup.treesearch.coins_to_numpy">[docs]</a><span class="k">def</span> <span class="nf">coins_to_numpy</span><span class="p">(</span><span class="n">game</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Game coins info to numpy array</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    game : camel up game</span>
+<span class="sd">        Camel up game class</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    array</span>
+<span class="sd">        Numpy array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;coins&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="n">game</span><span class="o">.</span><span class="n">player_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()]],</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;player&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;coins&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">)],</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="bet_tiles_to_numpy"><a class="viewcode-back" href="../../camelup.html#camelup.treesearch.bet_tiles_to_numpy">[docs]</a><span class="k">def</span> <span class="nf">bet_tiles_to_numpy</span><span class="p">(</span><span class="n">game</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Bet tiles to numpy array</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    game : camel up game</span>
+<span class="sd">        Camel up game class</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    array</span>
+<span class="sd">        Numpy array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">camel</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">sum</span><span class="p">(</span><span class="n">camel</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">camel</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="n">game</span><span class="o">.</span><span class="n">player_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+            <span class="k">for</span> <span class="n">camel</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;bet_tiles&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+        <span class="p">],</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;player&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;camel&quot;</span><span class="p">,</span> <span class="s2">&quot;U6&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;bets&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">)],</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="create_prob_array"><a class="viewcode-back" href="../../camelup.html#camelup.treesearch.create_prob_array">[docs]</a><span class="k">def</span> <span class="nf">create_prob_array</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">iter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create probility from monte carlo results</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    result : array</span>
+<span class="sd">        Array with monte carlo results</span>
+<span class="sd">    iter : int</span>
+<span class="sd">        Number of simulation iterations</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    array</span>
+<span class="sd">        Numpy array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">bins</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;camel&quot;</span><span class="p">],</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">counts_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">counts</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">)])</span>
+    <span class="n">result_array</span> <span class="o">=</span> <span class="n">append_fields</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="s2">&quot;counts&quot;</span><span class="p">,</span> <span class="n">counts_array</span><span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">],</span> <span class="n">usemask</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">result_array</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;camel&quot;</span><span class="p">,</span> <span class="s2">&quot;counts&quot;</span><span class="p">)</span>
+    <span class="n">prob_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">result_array</span><span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="nb">iter</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;prob&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">append_fields</span><span class="p">(</span><span class="n">result_array</span><span class="p">,</span> <span class="s2">&quot;prob&quot;</span><span class="p">,</span> <span class="n">prob_array</span><span class="p">[</span><span class="s2">&quot;prob&quot;</span><span class="p">],</span> <span class="n">usemask</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="turn_prob_numpy"><a class="viewcode-back" href="../../camelup.html#camelup.treesearch.turn_prob_numpy">[docs]</a><span class="k">def</span> <span class="nf">turn_prob_numpy</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="nb">iter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create turn probability arrays</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    game : camel up game</span>
+<span class="sd">        Camel up game class</span>
+<span class="sd">    iter : int</span>
+<span class="sd">        Number of simulation iterations</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    array</span>
+<span class="sd">        Numpy array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">winner_result</span><span class="p">,</span> <span class="n">tile_points_result</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">turn_monte</span><span class="p">(</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">camel_dict</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">tiles_dict</span><span class="p">,</span> <span class="nb">iter</span><span class="o">=</span><span class="nb">iter</span>
+    <span class="p">)</span>
+    <span class="n">prob_first</span> <span class="o">=</span> <span class="n">create_prob_array</span><span class="p">(</span><span class="n">winner_result</span><span class="p">[</span><span class="n">winner_result</span><span class="p">[</span><span class="s2">&quot;place&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span> <span class="nb">iter</span><span class="p">)</span>
+    <span class="n">prob_second</span> <span class="o">=</span> <span class="n">create_prob_array</span><span class="p">(</span><span class="n">winner_result</span><span class="p">[</span><span class="n">winner_result</span><span class="p">[</span><span class="s2">&quot;place&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">],</span> <span class="nb">iter</span><span class="p">)</span>
+    <span class="n">prob_other</span> <span class="o">=</span> <span class="n">create_prob_array</span><span class="p">(</span><span class="n">winner_result</span><span class="p">[</span><span class="n">winner_result</span><span class="p">[</span><span class="s2">&quot;place&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">],</span> <span class="nb">iter</span><span class="p">)</span>
+    <span class="n">exp_tile_points</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">numpy_group_by_sum</span><span class="p">(</span><span class="n">tile_points_result</span><span class="p">,</span> <span class="s2">&quot;player&quot;</span><span class="p">,</span> <span class="s2">&quot;points&quot;</span><span class="p">)</span>
+    <span class="n">multiply_array</span> <span class="o">=</span> <span class="n">exp_tile_points</span><span class="p">[</span><span class="s2">&quot;points&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="nb">iter</span>
+    <span class="n">exp_tile_points</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">add_col_np</span><span class="p">(</span><span class="n">exp_tile_points</span><span class="p">,</span> <span class="s2">&quot;exp_points&quot;</span><span class="p">,</span> <span class="n">multiply_array</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">prob_first</span><span class="p">,</span> <span class="n">prob_second</span><span class="p">,</span> <span class="n">prob_other</span><span class="p">,</span> <span class="n">exp_tile_points</span></div>
+
+
+<div class="viewcode-block" id="game_prob_numpy"><a class="viewcode-back" href="../../camelup.html#camelup.treesearch.game_prob_numpy">[docs]</a><span class="k">def</span> <span class="nf">game_prob_numpy</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="nb">iter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create game probability arrays</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    game : camel up game</span>
+<span class="sd">        Camel up game class</span>
+<span class="sd">    iter : int</span>
+<span class="sd">        Number of simulation iterations</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    array</span>
+<span class="sd">        Numpy array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">game_monte</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">camel_dict</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">tiles_dict</span><span class="p">,</span> <span class="nb">iter</span><span class="o">=</span><span class="nb">iter</span><span class="p">)</span>
+    <span class="n">loser_place</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;place&quot;</span><span class="p">])</span>
+    <span class="n">prob_first</span> <span class="o">=</span> <span class="n">create_prob_array</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;place&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span> <span class="nb">iter</span><span class="p">)</span>
+    <span class="n">prob_last</span> <span class="o">=</span> <span class="n">create_prob_array</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;place&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">loser_place</span><span class="p">],</span> <span class="nb">iter</span><span class="p">)</span>
+    <span class="n">prob_other</span> <span class="o">=</span> <span class="n">create_prob_array</span><span class="p">(</span>
+        <span class="n">result</span><span class="p">[(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;place&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;place&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">loser_place</span><span class="p">)],</span> <span class="nb">iter</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">prob_first</span><span class="p">,</span> <span class="n">prob_last</span><span class="p">,</span> <span class="n">prob_other</span></div>
+
+
+<div class="viewcode-block" id="winner_loser_bets_to_numpy"><a class="viewcode-back" href="../../camelup.html#camelup.treesearch.winner_loser_bets_to_numpy">[docs]</a><span class="k">def</span> <span class="nf">winner_loser_bets_to_numpy</span><span class="p">(</span><span class="n">game</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create numpy array for game bets</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    game : camel up game</span>
+<span class="sd">        Camel up game class</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    array</span>
+<span class="sd">        Numpy array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">winner_bets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">winner_bets</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;player&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;camel&quot;</span><span class="p">,</span> <span class="s2">&quot;U6&quot;</span><span class="p">)])</span>
+    <span class="n">loser_bets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">loser_bets</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;player&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;camel&quot;</span><span class="p">,</span> <span class="s2">&quot;U6&quot;</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">winner_bets</span><span class="p">,</span> <span class="n">loser_bets</span></div>
+</pre></div>
+
+           </div>
+
+          </div>
+          <footer>
+
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Michael Gracie
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,14 +1,18 @@
 Welcome to camelup's documentation!
 ======================================
 
+.. include:: ../../readme.rst
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    readme
-   installation
-   modules
-   contributing
+   Installation <Installation>
+   Gameplay <gameplay>
+   Robot Methodology
+   API Reference <modules>
+   Contributing <contributing>
 
 Indices and tables
 ==================

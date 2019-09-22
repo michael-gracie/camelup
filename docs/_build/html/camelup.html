@@ -1,0 +1,1287 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>camelup package &mdash; camelup 0.1.0 documentation</title>
+
+
+
+
+
+
+
+
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+
+
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+
+
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="contributing.html" />
+    <link rel="prev" title="camelup" href="modules.html" />
+</head>
+
+<body class="wy-body-for-nav">
+
+
+  <div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+            <a href="index.html" class="icon icon-home"> camelup
+
+
+
+          </a>
+
+
+
+
+              <div class="version">
+                0.1.0
+              </div>
+
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+
+
+
+
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">camelup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">camelup</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">camelup package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-camelup.app">camelup.app module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-camelup.camelup">camelup.camelup module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-camelup.config">camelup.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-camelup.gameplay">camelup.gameplay module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-camelup.treesearch">camelup.treesearch module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-camelup.utilities">camelup.utilities module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-camelup">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+      <nav class="wy-nav-top" aria-label="top navigation">
+
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">camelup</a>
+
+      </nav>
+
+
+      <div class="wy-nav-content">
+
+        <div class="rst-content">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+
+      <li><a href="index.html">Docs</a> &raquo;</li>
+
+          <li><a href="modules.html">camelup</a> &raquo;</li>
+
+      <li>camelup package</li>
+
+
+      <li class="wy-breadcrumbs-aside">
+
+
+            <a href="_sources/camelup.rst.txt" rel="nofollow"> View page source</a>
+
+
+      </li>
+
+  </ul>
+
+
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <div class="section" id="camelup-package">
+<h1>camelup package<a class="headerlink" href="#camelup-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-camelup.app">
+<span id="camelup-app-module"></span><h2>camelup.app module<a class="headerlink" href="#module-camelup.app" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="camelup.app.CamelApp">
+<em class="property">class </em><code class="sig-prename descclassname">camelup.app.</code><code class="sig-name descname">CamelApp</code><a class="reference internal" href="_modules/camelup/app.html#CamelApp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.app.CamelApp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.Tk</span></code></p>
+<p>Top level tk app</p>
+<dl class="attribute">
+<dt id="camelup.app.CamelApp.title">
+<code class="sig-name descname">title</code><a class="headerlink" href="#camelup.app.CamelApp.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Title of app</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="camelup.app.CamelApp.game">
+<code class="sig-name descname">game</code><a class="headerlink" href="#camelup.app.CamelApp.game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Camelup class to visualize</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="camelup.app.CamelApp._frame">
+<code class="sig-name descname">_frame</code><a class="headerlink" href="#camelup.app.CamelApp._frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current frame to show within the app</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>frame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.app.CamelApp.switch_to_game">
+<code class="sig-name descname">switch_to_game</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/app.html#CamelApp.switch_to_game"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.app.CamelApp.switch_to_game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switch to game frame</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.app.CamelApp.switch_to_start">
+<code class="sig-name descname">switch_to_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/app.html#CamelApp.switch_to_start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.app.CamelApp.switch_to_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switch to start frame, reset the game</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="camelup.app.GamePage">
+<em class="property">class </em><code class="sig-prename descclassname">camelup.app.</code><code class="sig-name descname">GamePage</code><span class="sig-paren">(</span><em class="sig-param">master</em>, <em class="sig-param">game</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/app.html#GamePage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.app.GamePage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.Frame</span></code></p>
+<p>Game frame</p>
+<dl class="attribute">
+<dt id="camelup.app.GamePage.img">
+<code class="sig-name descname">img</code><a class="headerlink" href="#camelup.app.GamePage.img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Image of camelup game</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="camelup.app.GamePage.board">
+<code class="sig-name descname">board</code><a class="headerlink" href="#camelup.app.GamePage.board" title="Permalink to this definition">¶</a></dt>
+<dd><p>Label that contains <cite>img</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="camelup.app.GamePage.player_turn_text">
+<code class="sig-name descname">player_turn_text</code><a class="headerlink" href="#camelup.app.GamePage.player_turn_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Text with which player’s turn it is</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="camelup.app.GamePage.player_turn">
+<code class="sig-name descname">player_turn</code><a class="headerlink" href="#camelup.app.GamePage.player_turn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Label that contains <cite>player_turn_text</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="camelup.app.GamePage.combo">
+<code class="sig-name descname">combo</code><a class="headerlink" href="#camelup.app.GamePage.combo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combobox with all the potential moves</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="camelup.app.GamePage.turn_enter">
+<code class="sig-name descname">turn_enter</code><a class="headerlink" href="#camelup.app.GamePage.turn_enter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Button to enter the play</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="camelup.app.GamePage.turn_info">
+<code class="sig-name descname">turn_info</code><a class="headerlink" href="#camelup.app.GamePage.turn_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Info with what happened within the turn</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="camelup.app.GamePage.turn_info_label">
+<code class="sig-name descname">turn_info_label</code><a class="headerlink" href="#camelup.app.GamePage.turn_info_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lable for <cite>turn_info</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.app.GamePage.play">
+<code class="sig-name descname">play</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/app.html#GamePage.play"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.app.GamePage.play" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes a play</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.app.GamePage.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/app.html#GamePage.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.app.GamePage.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the image of the board</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="camelup.app.StartPage">
+<em class="property">class </em><code class="sig-prename descclassname">camelup.app.</code><code class="sig-name descname">StartPage</code><span class="sig-paren">(</span><em class="sig-param">master</em>, <em class="sig-param">game</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/app.html#StartPage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.app.StartPage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.Frame</span></code></p>
+<p>Frame for the starting page of the app
+.. attribute:: names</p>
+<blockquote>
+<div><p>Names of players</p>
+<dl class="field-list simple">
+<dt class="field-odd">type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="attribute">
+<dt id="camelup.app.StartPage.player_labels">
+<code class="sig-name descname">player_labels</code><a class="headerlink" href="#camelup.app.StartPage.player_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Player labels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="camelup.app.StartPage.num_players">
+<code class="sig-name descname">num_players</code><a class="headerlink" href="#camelup.app.StartPage.num_players" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combobox object to select players</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="camelup.app.StartPage.game_enter">
+<code class="sig-name descname">game_enter</code><a class="headerlink" href="#camelup.app.StartPage.game_enter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Button object to enter game</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.app.StartPage.destroy_start">
+<code class="sig-name descname">destroy_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/app.html#StartPage.destroy_start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.app.StartPage.destroy_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroy the start frame</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.app.StartPage.name_text_boxes">
+<code class="sig-name descname">name_text_boxes</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/app.html#StartPage.name_text_boxes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.app.StartPage.name_text_boxes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Genreate the text boxes to input names based of number of players selected</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.app.create_board">
+<code class="sig-prename descclassname">camelup.app.</code><code class="sig-name descname">create_board</code><span class="sig-paren">(</span><em class="sig-param">img</em>, <em class="sig-param">game</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/app.html#create_board"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.app.create_board" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the board from the base image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img</strong> (<em>PIL object</em>) – Base board to put the board onto</p></li>
+<li><p><strong>game</strong> (<em>camelup game</em>) – Camel up game to visualize</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Info for where the tiles were placed on the image</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.app.modulo_space">
+<code class="sig-prename descclassname">camelup.app.</code><code class="sig-name descname">modulo_space</code><span class="sig-paren">(</span><em class="sig-param">space</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/app.html#modulo_space"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.app.modulo_space" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate spaces greater than 16 to a space on the board</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>space</strong> (<em>int</em>) – Space the camel was on</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Space the camel will be displayed on</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.app.open_camel">
+<code class="sig-prename descclassname">camelup.app.</code><code class="sig-name descname">open_camel</code><span class="sig-paren">(</span><em class="sig-param">file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/app.html#open_camel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.app.open_camel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the camel files and put the transparceny filter on them</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – File location</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>PIL image object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.app.place_camel_dict">
+<code class="sig-prename descclassname">camelup.app.</code><code class="sig-name descname">place_camel_dict</code><span class="sig-paren">(</span><em class="sig-param">img</em>, <em class="sig-param">game</em>, <em class="sig-param">board_info</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/app.html#place_camel_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.app.place_camel_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Placing the camels on the board</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img</strong> (<em>object</em>) – PIL image to put the camels on</p></li>
+<li><p><strong>game</strong> (<em>class</em>) – Camelup game to visualize</p></li>
+<li><p><strong>board_info</strong> (<em>dict</em>) – Dict with info about where to place tiles</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.app.place_tiles">
+<code class="sig-prename descclassname">camelup.app.</code><code class="sig-name descname">place_tiles</code><span class="sig-paren">(</span><em class="sig-param">img</em>, <em class="sig-param">game</em>, <em class="sig-param">board_info</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/app.html#place_tiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.app.place_tiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Place tiles on board</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img</strong> (<em>object</em>) – PIL image to put the camels on</p></li>
+<li><p><strong>game</strong> (<em>class</em>) – Camelup game to place</p></li>
+<li><p><strong>board_info</strong> (<em>dict</em>) – Dict with info about where to place tiles</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-camelup.camelup">
+<span id="camelup-camelup-module"></span><h2>camelup.camelup module<a class="headerlink" href="#module-camelup.camelup" title="Permalink to this headline">¶</a></h2>
+<p>Main module.</p>
+<dl class="class">
+<dt id="camelup.camelup.Game">
+<em class="property">class </em><code class="sig-prename descclassname">camelup.camelup.</code><code class="sig-name descname">Game</code><span class="sig-paren">(</span><em class="sig-param">num_players</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>base class - doesn’t initalize anything</p>
+<dl class="method">
+<dt id="camelup.camelup.Game.available_moves">
+<code class="sig-name descname">available_moves</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.available_moves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.available_moves" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes all the moves that are available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Moves available to play</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.available_moves_pruned">
+<code class="sig-name descname">available_moves_pruned</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.available_moves_pruned"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.available_moves_pruned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes all the moves that are available, pruned for only moves that make sense.</p>
+<p>Can only bet on the top 2 and bottom the camels for the game.
+Can’t place tiles that go past the farthest camel by 3 spaces.
+Can only bet on the top 3 camels for the turn</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Moves available to play</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.available_tile_placements">
+<code class="sig-name descname">available_tile_placements</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.available_tile_placements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.available_tile_placements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the available tiles</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of available spaces of tiles</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.available_tile_placements_pruned">
+<code class="sig-name descname">available_tile_placements_pruned</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.available_tile_placements_pruned"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.available_tile_placements_pruned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the available tiles</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of available spaces of tiles</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.end_game">
+<code class="sig-name descname">end_game</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.end_game"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.end_game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ends the game
+1. Scores the round
+2. Scores the winner bets
+3. Scores the loser bets</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.end_round">
+<code class="sig-name descname">end_round</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.end_round"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.end_round" title="Permalink to this definition">¶</a></dt>
+<dd><p>The end of the round triggers the following
+1. Scores the tiles
+2. Resets the camels need_roll flag
+3. Returns the skip/block tile to the players hand
+4. Removes the bet tiles from the players hand
+5. Place the bet tiles back on the board</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.game_monte">
+<code class="sig-name descname">game_monte</code><span class="sig-paren">(</span><em class="sig-param">camel_dict</em>, <em class="sig-param">tiles_dict</em>, <em class="sig-param">iter=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.game_monte"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.game_monte" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs monte carlo for the turn</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.play">
+<code class="sig-name descname">play</code><span class="sig-paren">(</span><em class="sig-param">move</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.play"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.play" title="Permalink to this definition">¶</a></dt>
+<dd><ol class="arabic simple">
+<li><p>Plays the move</p></li>
+<li><p>Update state</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>move</strong> (<em>'str'</em>) – The move to play, formatted as a function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.play_bet_tile">
+<code class="sig-name descname">play_bet_tile</code><span class="sig-paren">(</span><em class="sig-param">camel</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.play_bet_tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.play_bet_tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play a bet tile</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>camel</strong> (<em>str</em>) – The camel to take a bet tile for</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.play_loser_card">
+<code class="sig-name descname">play_loser_card</code><span class="sig-paren">(</span><em class="sig-param">camel</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.play_loser_card"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.play_loser_card" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play a loser card</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>camel</strong> (<em>str</em>) – The camel to bet on a loss</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.play_roll">
+<code class="sig-name descname">play_roll</code><span class="sig-paren">(</span><em class="sig-param">camel</em>, <em class="sig-param">roll</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.play_roll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.play_roll" title="Permalink to this definition">¶</a></dt>
+<dd><ol class="arabic simple">
+<li><p>Moves the camel</p></li>
+<li><p>Give points if camel landed on a block or skip tile</p></li>
+<li><p>Gives a point to the roller</p></li>
+<li><p>Updates needs roll</p></li>
+<li><p>Checks for end of game</p></li>
+<li><p>Checks for end of round</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>camel</strong> (<em>str</em>) – Camel that is rolled</p></li>
+<li><p><strong>roll</strong> (<em>int</em>) – The number that is rolled</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.play_tile">
+<code class="sig-name descname">play_tile</code><span class="sig-paren">(</span><em class="sig-param">tile_type</em>, <em class="sig-param">space</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.play_tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.play_tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plays a skip or block tile</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tile_type</strong> (<em>str</em>) – Type of tyle, either <cite>block</cite> or <cite>skip</cite></p></li>
+<li><p><strong>space</strong> (<em>int</em>) – The space to play the tile</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.play_winner_card">
+<code class="sig-name descname">play_winner_card</code><span class="sig-paren">(</span><em class="sig-param">camel</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.play_winner_card"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.play_winner_card" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play a winner card</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>camel</strong> (<em>str</em>) – The camel to bet on a win</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.score_round">
+<code class="sig-name descname">score_round</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.score_round"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.score_round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scores the round based on the tiles the players have and the position of camels.
+If the camel is in first then the player gets full points.
+If in second they get 1 point, else they lose a point</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.sim_game">
+<code class="sig-name descname">sim_game</code><span class="sig-paren">(</span><em class="sig-param">camel_dict</em>, <em class="sig-param">tiles</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.sim_game"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.sim_game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulates a single game</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.sim_turn">
+<code class="sig-name descname">sim_turn</code><span class="sig-paren">(</span><em class="sig-param">camel_dict</em>, <em class="sig-param">tiles</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.sim_turn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.sim_turn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulates a single turn</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="camelup.camelup.Game.turn_monte">
+<code class="sig-name descname">turn_monte</code><span class="sig-paren">(</span><em class="sig-param">camel_dict</em>, <em class="sig-param">tiles_dict</em>, <em class="sig-param">iter=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/camelup.html#Game.turn_monte"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.camelup.Game.turn_monte" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs monte carlo for the turn</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-camelup.config">
+<span id="camelup-config-module"></span><h2>camelup.config module<a class="headerlink" href="#module-camelup.config" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-camelup.gameplay">
+<span id="camelup-gameplay-module"></span><h2>camelup.gameplay module<a class="headerlink" href="#module-camelup.gameplay" title="Permalink to this headline">¶</a></h2>
+<p>Module with basic gameplay</p>
+<dl class="function">
+<dt id="camelup.gameplay.block_move">
+<code class="sig-prename descclassname">camelup.gameplay.</code><code class="sig-name descname">block_move</code><span class="sig-paren">(</span><em class="sig-param">camel_dict</em>, <em class="sig-param">movers</em>, <em class="sig-param">destinationers</em>, <em class="sig-param">destination</em>, <em class="sig-param">min_height_movers</em>, <em class="sig-param">num_movers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/gameplay.html#block_move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.gameplay.block_move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executing a move where the camel hit a block tile</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>camel_dict</strong> (<em>nested dict</em>) – Dictionary with current camel positions</p></li>
+<li><p><strong>movers</strong> (<em>list</em>) – List of camels that are moving</p></li>
+<li><p><strong>destinationers</strong> (<em>list</em>) – List of camels on the destination square</p></li>
+<li><p><strong>destination</strong> (<em>int</em>) – Square where camels are moving</p></li>
+<li><p><strong>min_height_movers</strong> (<em>int</em>) – The minimum height of the camels that are moving</p></li>
+<li><p><strong>num_movers</strong> (<em>int</em>) – The number of camels moving</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.gameplay.camels_in_dest">
+<code class="sig-prename descclassname">camelup.gameplay.</code><code class="sig-name descname">camels_in_dest</code><span class="sig-paren">(</span><em class="sig-param">camel_dict</em>, <em class="sig-param">destination</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/gameplay.html#camels_in_dest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.gameplay.camels_in_dest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the camels in the destination square</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>camel_dict</strong> (<em>nested dict</em>) – Dictionary with current camel positions</p></li>
+<li><p><strong>destination</strong> (<em>int</em>) – Square where camels are moving</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>max_height_dest</strong> (<em>int</em>) – The max height of camels on the destination sqaure</p></li>
+<li><p><strong>destinationers</strong> (<em>list</em>) – List of camels on the destination square</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.gameplay.camels_to_move">
+<code class="sig-prename descclassname">camelup.gameplay.</code><code class="sig-name descname">camels_to_move</code><span class="sig-paren">(</span><em class="sig-param">camel_dict</em>, <em class="sig-param">space</em>, <em class="sig-param">height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/gameplay.html#camels_to_move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.gameplay.camels_to_move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getting information about camels that need to move</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>camel_dict</strong> (<em>nested dict</em>) – Dictionary with current camel positions</p></li>
+<li><p><strong>space</strong> (<em>int</em>) – Space the camel is on</p></li>
+<li><p><strong>height</strong> (<em>int</em>) – Height of the camel</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>min_height_movers</strong> (<em>int</em>) – The minimum height of the camels that are moving</p></li>
+<li><p><strong>num_movers</strong> (<em>int</em>) – The number of camels moving</p></li>
+<li><p><strong>movers</strong> (<em>list</em>) – List of camels that are moving</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.gameplay.move">
+<code class="sig-prename descclassname">camelup.gameplay.</code><code class="sig-name descname">move</code><span class="sig-paren">(</span><em class="sig-param">camel_dict</em>, <em class="sig-param">tiles_dict</em>, <em class="sig-param">camel</em>, <em class="sig-param">roll</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/gameplay.html#move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.gameplay.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Puting all the moves together</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>camel_dict</strong> (<em>nested dict</em>) – Dictionary with current camel positions</p></li>
+<li><p><strong>tiles_dict</strong> (<em>dict</em>) – Dictonary with tiles information</p></li>
+<li><p><strong>camel</strong> (<em>str</em>) – Name of camel that was rolled</p></li>
+<li><p><strong>roll</strong> (<em>int</em>) – Roll on dice, ranges from 1 to 3</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>give_points</strong> – The tile which was landed on and thusly should give points</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.gameplay.reg_move">
+<code class="sig-prename descclassname">camelup.gameplay.</code><code class="sig-name descname">reg_move</code><span class="sig-paren">(</span><em class="sig-param">camel_dict</em>, <em class="sig-param">movers</em>, <em class="sig-param">destination</em>, <em class="sig-param">min_height_movers</em>, <em class="sig-param">max_height_dest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/gameplay.html#reg_move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.gameplay.reg_move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executing a regular move</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>camel_dict</strong> (<em>nested dict</em>) – Dictionary with current camel positions</p></li>
+<li><p><strong>movers</strong> (<em>list</em>) – List of camels that are moving</p></li>
+<li><p><strong>destination</strong> (<em>int</em>) – Square where camels are moving</p></li>
+<li><p><strong>min_height_movers</strong> (<em>int</em>) – The minimum height of the camels that are moving</p></li>
+<li><p><strong>max_height_dest</strong> (<em>int</em>) – The max height of camels on the destination sqaure</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-camelup.treesearch">
+<span id="camelup-treesearch-module"></span><h2>camelup.treesearch module<a class="headerlink" href="#module-camelup.treesearch" title="Permalink to this headline">¶</a></h2>
+<p>Module with tree search decisioning</p>
+<dl class="function">
+<dt id="camelup.treesearch.bet_tiles_to_numpy">
+<code class="sig-prename descclassname">camelup.treesearch.</code><code class="sig-name descname">bet_tiles_to_numpy</code><span class="sig-paren">(</span><em class="sig-param">game</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/treesearch.html#bet_tiles_to_numpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.treesearch.bet_tiles_to_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bet tiles to numpy array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>game</strong> (<em>camel up game</em>) – Camel up game class</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.treesearch.calc_exp_value_np">
+<code class="sig-prename descclassname">camelup.treesearch.</code><code class="sig-name descname">calc_exp_value_np</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">exp_value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/treesearch.html#calc_exp_value_np"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.treesearch.calc_exp_value_np" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculat the expected value based on the probability and points given</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>array</em>) – Numpy array</p></li>
+<li><p><strong>exp_value</strong> – Name of column for expected value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Modified numpy array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.treesearch.calc_utility_np">
+<code class="sig-prename descclassname">camelup.treesearch.</code><code class="sig-name descname">calc_utility_np</code><span class="sig-paren">(</span><em class="sig-param">game</em>, <em class="sig-param">iter</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/treesearch.html#calc_utility_np"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.treesearch.calc_utility_np" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calc utility of current position</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>game</strong> (<em>camel up game</em>) – Camel up game class</p></li>
+<li><p><strong>iter</strong> (<em>int</em>) – Iterations to run the monte carlo simulations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy structured array with expected utilities</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.treesearch.coins_to_numpy">
+<code class="sig-prename descclassname">camelup.treesearch.</code><code class="sig-name descname">coins_to_numpy</code><span class="sig-paren">(</span><em class="sig-param">game</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/treesearch.html#coins_to_numpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.treesearch.coins_to_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Game coins info to numpy array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>game</strong> (<em>camel up game</em>) – Camel up game class</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.treesearch.create_prob_array">
+<code class="sig-prename descclassname">camelup.treesearch.</code><code class="sig-name descname">create_prob_array</code><span class="sig-paren">(</span><em class="sig-param">result</em>, <em class="sig-param">iter</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/treesearch.html#create_prob_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.treesearch.create_prob_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create probility from monte carlo results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>result</strong> (<em>array</em>) – Array with monte carlo results</p></li>
+<li><p><strong>iter</strong> (<em>int</em>) – Number of simulation iterations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.treesearch.exp_value">
+<code class="sig-prename descclassname">camelup.treesearch.</code><code class="sig-name descname">exp_value</code><span class="sig-paren">(</span><em class="sig-param">game</em>, <em class="sig-param">depth</em>, <em class="sig-param">MAX_DEPTH</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/treesearch.html#exp_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.treesearch.exp_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the expected value from a roll play</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>game</strong> (<em>camel up game</em>) – Camel up game class</p></li>
+<li><p><strong>depth</strong> (<em>int</em>) – The current depth in the tree</p></li>
+<li><p><strong>MAX_DEPTH</strong> (<em>int</em>) – Depth of tree to be built, 1 is recommended for performance considerations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Utilities of the expected value of the play</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.treesearch.game_prob_numpy">
+<code class="sig-prename descclassname">camelup.treesearch.</code><code class="sig-name descname">game_prob_numpy</code><span class="sig-paren">(</span><em class="sig-param">game</em>, <em class="sig-param">iter</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/treesearch.html#game_prob_numpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.treesearch.game_prob_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create game probability arrays</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>game</strong> (<em>camel up game</em>) – Camel up game class</p></li>
+<li><p><strong>iter</strong> (<em>int</em>) – Number of simulation iterations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.treesearch.get_move">
+<code class="sig-prename descclassname">camelup.treesearch.</code><code class="sig-name descname">get_move</code><span class="sig-paren">(</span><em class="sig-param">game</em>, <em class="sig-param">MAX_DEPTH=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/treesearch.html#get_move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.treesearch.get_move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recommends the most optimal move</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>game</strong> (<em>camel up game</em>) – Camel up game class</p></li>
+<li><p><strong>MAX_DEPTH</strong> (<em>int</em>) – Depth of tree to be built, 1 is recommended for performance considerations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dictionary of move and their corresponding expected value in coins</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.treesearch.max_value">
+<code class="sig-prename descclassname">camelup.treesearch.</code><code class="sig-name descname">max_value</code><span class="sig-paren">(</span><em class="sig-param">game</em>, <em class="sig-param">depth</em>, <em class="sig-param">MAX_DEPTH</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/treesearch.html#max_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.treesearch.max_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the max value from all possible plays</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>game</strong> (<em>camel up game</em>) – Camel up game class</p></li>
+<li><p><strong>depth</strong> (<em>int</em>) – The current depth in the tree</p></li>
+<li><p><strong>MAX_DEPTH</strong> (<em>int</em>) – Depth of tree to be built, 1 is recommended for performance considerations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Utilities of the play with the max value</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.treesearch.turn_prob_numpy">
+<code class="sig-prename descclassname">camelup.treesearch.</code><code class="sig-name descname">turn_prob_numpy</code><span class="sig-paren">(</span><em class="sig-param">game</em>, <em class="sig-param">iter</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/treesearch.html#turn_prob_numpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.treesearch.turn_prob_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create turn probability arrays</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>game</strong> (<em>camel up game</em>) – Camel up game class</p></li>
+<li><p><strong>iter</strong> (<em>int</em>) – Number of simulation iterations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.treesearch.value">
+<code class="sig-prename descclassname">camelup.treesearch.</code><code class="sig-name descname">value</code><span class="sig-paren">(</span><em class="sig-param">game</em>, <em class="sig-param">move</em>, <em class="sig-param">depth</em>, <em class="sig-param">player</em>, <em class="sig-param">MAX_DEPTH</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/treesearch.html#value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.treesearch.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value function for recursive multi agent utility</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>game</strong> (<em>camel up game</em>) – Camel up game class</p></li>
+<li><p><strong>move</strong> (<em>str</em>) – The move that is being assessed for value</p></li>
+<li><p><strong>depth</strong> (<em>int</em>) – The current depth in the tree</p></li>
+<li><p><strong>player</strong> (<em>int</em>) – The current player in the tree</p></li>
+<li><p><strong>MAX_DEPTH</strong> (<em>int</em>) – Depth of tree to be built, 1 is recommended for performance considerations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The value of the move for all players</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.treesearch.winner_loser_bets_to_numpy">
+<code class="sig-prename descclassname">camelup.treesearch.</code><code class="sig-name descname">winner_loser_bets_to_numpy</code><span class="sig-paren">(</span><em class="sig-param">game</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/treesearch.html#winner_loser_bets_to_numpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.treesearch.winner_loser_bets_to_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create numpy array for game bets</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>game</strong> (<em>camel up game</em>) – Camel up game class</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-camelup.utilities">
+<span id="camelup-utilities-module"></span><h2>camelup.utilities module<a class="headerlink" href="#module-camelup.utilities" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="camelup.utilities.add_col_np">
+<code class="sig-prename descclassname">camelup.utilities.</code><code class="sig-name descname">add_col_np</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">target_col</em>, <em class="sig-param">array</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/utilities.html#add_col_np"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.utilities.add_col_np" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add column to np array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>array</em>) – Numpy array</p></li>
+<li><p><strong>target_col</strong> (<em>str</em>) – Column to create</p></li>
+<li><p><strong>array</strong> (<em>array</em>) – Array to add as column</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.utilities.add_list_to_dict">
+<code class="sig-prename descclassname">camelup.utilities.</code><code class="sig-name descname">add_list_to_dict</code><span class="sig-paren">(</span><em class="sig-param">dct</em>, <em class="sig-param">key</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/utilities.html#add_list_to_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.utilities.add_list_to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to create a dictionary where the values are lists and append to that list</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dct</strong> (<em>dictionary</em>) – Dictionary with values as lists</p></li>
+<li><p><strong>key</strong> (<em>object</em>) – Key for the dictionary</p></li>
+<li><p><strong>value</strong> (<em>object</em>) – Value to add to the list</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.utilities.add_value_dict">
+<code class="sig-prename descclassname">camelup.utilities.</code><code class="sig-name descname">add_value_dict</code><span class="sig-paren">(</span><em class="sig-param">dct</em>, <em class="sig-param">key</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/utilities.html#add_value_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.utilities.add_value_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function add a value to a the value of a dictionary if it exists if not, set to values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dct</strong> (<em>dictionary</em>) – Dictionary with values as lists</p></li>
+<li><p><strong>key</strong> (<em>object</em>) – Key for the dictionary</p></li>
+<li><p><strong>value</strong> (<em>object</em>) – Value to add to the list</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.utilities.benchmark">
+<code class="sig-prename descclassname">camelup.utilities.</code><code class="sig-name descname">benchmark</code><span class="sig-paren">(</span><em class="sig-param">func</em>, <em class="sig-param">iteration</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/utilities.html#benchmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.utilities.benchmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Full function to create a run benchmark that benchmarks each statement in a function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> (<em>function</em>) – Function to benck</p></li>
+<li><p><strong>iteration</strong> (<em>int</em>) – Number of interation</p></li>
+<li><p><strong>*args</strong> (<em>str</em>) – Arguments to pass to funcion</p></li>
+<li><p><strong>**kwargs</strong> (<em>str</em>) – Keyword arguments to pass to function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dictionary with the performance results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.utilities.create_benchmark_func">
+<code class="sig-prename descclassname">camelup.utilities.</code><code class="sig-name descname">create_benchmark_func</code><span class="sig-paren">(</span><em class="sig-param">tree</em>, <em class="sig-param">performance</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/utilities.html#create_benchmark_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.utilities.create_benchmark_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creating a benchmark function named benchmark_`func`</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tree</strong> (<em>str</em>) – AST for function to create benchmark function for</p></li>
+<li><p><strong>performance</strong> (<em>dict</em>) – Dictionary to capture function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tree of the benchmark function</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.utilities.numpy_group_by_sum">
+<code class="sig-prename descclassname">camelup.utilities.</code><code class="sig-name descname">numpy_group_by_sum</code><span class="sig-paren">(</span><em class="sig-param">array</em>, <em class="sig-param">index</em>, <em class="sig-param">sum_col</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/utilities.html#numpy_group_by_sum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.utilities.numpy_group_by_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do a group by for a numpy array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>array</em>) – Numpy array</p></li>
+<li><p><strong>index</strong> (<em>str</em>) – Column to group by</p></li>
+<li><p><strong>sum_col</strong> (<em>str</em>) – Column to sum</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.utilities.numpy_left_join">
+<code class="sig-prename descclassname">camelup.utilities.</code><code class="sig-name descname">numpy_left_join</code><span class="sig-paren">(</span><em class="sig-param">df1</em>, <em class="sig-param">df2</em>, <em class="sig-param">key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/utilities.html#numpy_left_join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.utilities.numpy_left_join" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic left join, return left join of 2 dataframe, duplicates allowing in df1. Only one key allowed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df1</strong> (<em>array</em>) – Left array</p></li>
+<li><p><strong>df2</strong> (<em>array</em>) – Right array</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – Key to join on</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.utilities.parse_dump">
+<code class="sig-prename descclassname">camelup.utilities.</code><code class="sig-name descname">parse_dump</code><span class="sig-paren">(</span><em class="sig-param">string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/utilities.html#parse_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.utilities.parse_dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets information from the AST dump and return the AST object and the id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>string</strong> (<em>str</em>) – Tree to extract the id for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A string with the object and name info</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.utilities.rename_np">
+<code class="sig-prename descclassname">camelup.utilities.</code><code class="sig-name descname">rename_np</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">columns</em>, <em class="sig-param">suffix</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/utilities.html#rename_np"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.utilities.rename_np" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename a column for numpy array adding a suffix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>array</em>) – Numpy array</p></li>
+<li><p><strong>columns</strong> (<em>list</em>) – Columns to rename</p></li>
+<li><p><strong>suffix</strong> (<em>str</em>) – Suffix to rename them with</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Numpy array</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="camelup.utilities.return_max_value">
+<code class="sig-prename descclassname">camelup.utilities.</code><code class="sig-name descname">return_max_value</code><span class="sig-paren">(</span><em class="sig-param">lst</em>, <em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/camelup/utilities.html#return_max_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#camelup.utilities.return_max_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a list of lists, look at x index for each list and return the list with
+the max value at that index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lst</strong> (<em>list of lists</em>) – List of lists to select a list from</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – Index from which to evaluate</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Description of returned object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-camelup">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-camelup" title="Permalink to this headline">¶</a></h2>
+<p>Top-level package for camelup.</p>
+</div>
+</div>
+
+
+           </div>
+
+          </div>
+          <footer>
+
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+
+        <a href="contributing.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+
+
+        <a href="modules.html" class="btn btn-neutral float-left" title="camelup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+    </div>
+
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Michael Gracie
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+
+
+
+
+
+</body>
+</html>

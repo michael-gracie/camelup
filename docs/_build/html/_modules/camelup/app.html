@@ -1,0 +1,679 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>camelup.app &mdash; camelup 0.1.0 documentation</title>
+
+
+
+
+
+
+
+
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+
+
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+
+
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+</head>
+
+<body class="wy-body-for-nav">
+
+
+  <div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+            <a href="../../index.html" class="icon icon-home"> camelup
+
+
+
+          </a>
+
+
+
+
+              <div class="version">
+                0.1.0
+              </div>
+
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+
+
+
+
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">camelup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">camelup</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+      <nav class="wy-nav-top" aria-label="top navigation">
+
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">camelup</a>
+
+      </nav>
+
+
+      <div class="wy-nav-content">
+
+        <div class="rst-content">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+
+      <li>camelup.app</li>
+
+
+      <li class="wy-breadcrumbs-aside">
+
+      </li>
+
+  </ul>
+
+
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <h1>Source code for camelup.app</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">tkinter</span> <span class="k">as</span> <span class="nn">tk</span>
+
+<span class="kn">from</span> <span class="nn">glob</span> <span class="k">import</span> <span class="n">glob</span>
+<span class="kn">from</span> <span class="nn">tkinter</span> <span class="k">import</span> <span class="n">ttk</span>
+<span class="kn">from</span> <span class="nn">tkinter.scrolledtext</span> <span class="k">import</span> <span class="n">ScrolledText</span>
+
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="k">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span><span class="p">,</span> <span class="n">ImageFont</span><span class="p">,</span> <span class="n">ImageTk</span>
+
+<span class="kn">import</span> <span class="nn">camelup.camelup</span> <span class="k">as</span> <span class="nn">camelup</span>
+<span class="kn">import</span> <span class="nn">camelup.config</span> <span class="k">as</span> <span class="nn">config</span>
+<span class="kn">import</span> <span class="nn">camelup.treesearch</span> <span class="k">as</span> <span class="nn">treesearch</span>
+
+
+<span class="n">CURR_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+
+<span class="n">font</span> <span class="o">=</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">truetype</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CURR_DIR</span><span class="p">,</span> <span class="s2">&quot;fonts/arial.ttf&quot;</span><span class="p">),</span> <span class="mi">9</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="create_board"><a class="viewcode-back" href="../../camelup.html#camelup.app.create_board">[docs]</a><span class="k">def</span> <span class="nf">create_board</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create the board from the base image</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    img : PIL object</span>
+<span class="sd">        Base board to put the board onto</span>
+<span class="sd">    game : camelup game</span>
+<span class="sd">        Camel up game to visualize</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Info for where the tiles were placed on the image</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">board_info</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+    <span class="n">border</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">border</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">5</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">border</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">5</span>
+    <span class="n">space</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">top_left_corner</span> <span class="o">=</span> <span class="p">(</span><span class="n">border</span><span class="p">,</span> <span class="n">border</span><span class="p">)</span>
+    <span class="n">bottom_right_corner</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_left_corner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">width</span><span class="p">,</span> <span class="n">top_left_corner</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">height</span><span class="p">)</span>
+    <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">top_left_corner</span><span class="p">,</span> <span class="n">bottom_right_corner</span><span class="p">],</span>
+        <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">251</span><span class="p">,</span> <span class="mi">207</span><span class="p">,</span> <span class="mi">41</span><span class="p">),</span>
+        <span class="n">outline</span><span class="o">=</span><span class="p">(</span><span class="mi">29</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">29</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">top_left_corner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">top_left_corner</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">space</span><span class="p">),</span>
+        <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span>
+        <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">board_info</span><span class="p">[</span><span class="n">space</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_left_corner</span><span class="p">,</span> <span class="n">bottom_right_corner</span><span class="p">)</span>
+    <span class="n">space</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">top_left_corner</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_left_corner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">width</span><span class="p">,</span> <span class="n">top_left_corner</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">bottom_right_corner</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_left_corner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">width</span><span class="p">,</span> <span class="n">top_left_corner</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">height</span><span class="p">)</span>
+        <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">top_left_corner</span><span class="p">,</span> <span class="n">bottom_right_corner</span><span class="p">],</span>
+            <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">251</span><span class="p">,</span> <span class="mi">207</span><span class="p">,</span> <span class="mi">41</span><span class="p">),</span>
+            <span class="n">outline</span><span class="o">=</span><span class="p">(</span><span class="mi">29</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">29</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">top_left_corner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">top_left_corner</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">space</span><span class="p">),</span>
+            <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span>
+            <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">board_info</span><span class="p">[</span><span class="n">space</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_left_corner</span><span class="p">,</span> <span class="n">bottom_right_corner</span><span class="p">)</span>
+        <span class="n">space</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">top_left_corner</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_left_corner</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">top_left_corner</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">height</span><span class="p">)</span>
+        <span class="n">bottom_right_corner</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_left_corner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">width</span><span class="p">,</span> <span class="n">top_left_corner</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">height</span><span class="p">)</span>
+        <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">top_left_corner</span><span class="p">,</span> <span class="n">bottom_right_corner</span><span class="p">],</span>
+            <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">251</span><span class="p">,</span> <span class="mi">207</span><span class="p">,</span> <span class="mi">41</span><span class="p">),</span>
+            <span class="n">outline</span><span class="o">=</span><span class="p">(</span><span class="mi">29</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">29</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">top_left_corner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">top_left_corner</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">space</span><span class="p">),</span>
+            <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span>
+            <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">board_info</span><span class="p">[</span><span class="n">space</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_left_corner</span><span class="p">,</span> <span class="n">bottom_right_corner</span><span class="p">)</span>
+        <span class="n">space</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">top_left_corner</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_left_corner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">width</span><span class="p">,</span> <span class="n">top_left_corner</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">bottom_right_corner</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_left_corner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">width</span><span class="p">,</span> <span class="n">top_left_corner</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">height</span><span class="p">)</span>
+        <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">top_left_corner</span><span class="p">,</span> <span class="n">bottom_right_corner</span><span class="p">],</span>
+            <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">251</span><span class="p">,</span> <span class="mi">207</span><span class="p">,</span> <span class="mi">41</span><span class="p">),</span>
+            <span class="n">outline</span><span class="o">=</span><span class="p">(</span><span class="mi">29</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">29</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">top_left_corner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">top_left_corner</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">space</span><span class="p">),</span>
+            <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span>
+            <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">board_info</span><span class="p">[</span><span class="n">space</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_left_corner</span><span class="p">,</span> <span class="n">bottom_right_corner</span><span class="p">)</span>
+        <span class="n">space</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">top_left_corner</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_left_corner</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">top_left_corner</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">height</span><span class="p">)</span>
+        <span class="n">bottom_right_corner</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_left_corner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">width</span><span class="p">,</span> <span class="n">top_left_corner</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">height</span><span class="p">)</span>
+        <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">top_left_corner</span><span class="p">,</span> <span class="n">bottom_right_corner</span><span class="p">],</span>
+            <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">251</span><span class="p">,</span> <span class="mi">207</span><span class="p">,</span> <span class="mi">41</span><span class="p">),</span>
+            <span class="n">outline</span><span class="o">=</span><span class="p">(</span><span class="mi">29</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">29</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">top_left_corner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">top_left_corner</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">space</span><span class="p">),</span>
+            <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span>
+            <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">board_info</span><span class="p">[</span><span class="n">space</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">top_left_corner</span><span class="p">,</span> <span class="n">bottom_right_corner</span><span class="p">)</span>
+        <span class="n">space</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="mi">120</span><span class="p">,</span> <span class="mi">340</span><span class="p">),</span> <span class="s2">&quot;To Be Rolled&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">bet_str</span> <span class="o">=</span> <span class="s2">&quot;Bet Tiles (Colour - Value)&quot;</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">bet_tiles</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">bet_str</span> <span class="o">+=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{key}</span><span class="s2"> - </span><span class="si">{val[0]}</span><span class="s2">&quot;</span>
+    <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span> <span class="n">bet_str</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">player_str</span> <span class="o">=</span> <span class="s2">&quot;Player Items&quot;</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">player_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">player_str</span> <span class="o">+=</span> <span class="n">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">{val[&quot;name&quot;]}</span><span class="s1"> Coins: </span><span class="si">{val[&quot;coins&quot;]}</span><span class="s1"> Bet Tiles: &#39;</span>
+        <span class="k">for</span> <span class="n">tile</span><span class="p">,</span> <span class="n">bets</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">player_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;bet_tiles&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">player_str</span> <span class="o">+=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{tile[0]}</span><span class="s2">(&quot;</span>
+            <span class="n">player_str</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">bets</span><span class="p">)</span>
+            <span class="n">player_str</span> <span class="o">+=</span> <span class="s2">&quot;) &quot;</span>
+    <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="mi">120</span><span class="p">,</span> <span class="mi">220</span><span class="p">),</span> <span class="n">player_str</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">game_str</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">f</span><span class="s2">&quot;Winner Bets: {len(game.winner_bets)}</span><span class="se">\n</span><span class="s2">Loser Bets: {len(game.loser_bets)}&quot;</span>
+    <span class="p">)</span>
+    <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">((</span><span class="mi">300</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span> <span class="n">game_str</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">board_info</span></div>
+
+
+<div class="viewcode-block" id="modulo_space"><a class="viewcode-back" href="../../camelup.html#camelup.app.modulo_space">[docs]</a><span class="k">def</span> <span class="nf">modulo_space</span><span class="p">(</span><span class="n">space</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Translate spaces greater than 16 to a space on the board</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    space : int</span>
+<span class="sd">        Space the camel was on</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        Space the camel will be displayed on</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">space</span> <span class="o">%</span> <span class="mi">16</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">16</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">space</span> <span class="o">%</span> <span class="mi">16</span></div>
+
+
+<div class="viewcode-block" id="open_camel"><a class="viewcode-back" href="../../camelup.html#camelup.app.open_camel">[docs]</a><span class="k">def</span> <span class="nf">open_camel</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Open the camel files and put the transparceny filter on them</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file : str</span>
+<span class="sd">        File location</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    object</span>
+<span class="sd">        PIL image object</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">camel</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">transparency</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;RGBA&quot;</span><span class="p">,</span> <span class="n">camel</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">transparency</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">camel</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">per</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">wsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">transparency</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">per</span><span class="p">)</span>
+    <span class="n">hsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">transparency</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">per</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">transparency</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="n">wsize</span><span class="p">,</span> <span class="n">hsize</span><span class="p">),</span> <span class="n">Image</span><span class="o">.</span><span class="n">ANTIALIAS</span><span class="p">)</span></div>
+
+
+<span class="n">picture_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">camel</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">CAMELS</span><span class="p">:</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CURR_DIR</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;img/*</span><span class="si">{camel}</span><span class="s2">*&quot;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">picture_dict</span><span class="p">[</span><span class="n">camel</span><span class="p">]</span> <span class="o">=</span> <span class="n">open_camel</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="place_camel_dict"><a class="viewcode-back" href="../../camelup.html#camelup.app.place_camel_dict">[docs]</a><span class="k">def</span> <span class="nf">place_camel_dict</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">game</span><span class="p">,</span> <span class="n">board_info</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Placing the camels on the board</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    img : object</span>
+<span class="sd">        PIL image to put the camels on</span>
+<span class="sd">    game : class</span>
+<span class="sd">        Camelup game to visualize</span>
+<span class="sd">    board_info : dict</span>
+<span class="sd">        Dict with info about where to place tiles</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">border</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">border</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">5</span>
+    <span class="k">for</span> <span class="n">camel</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">camel_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">pic</span> <span class="o">=</span> <span class="n">picture_dict</span><span class="p">[</span><span class="n">camel</span><span class="p">]</span>
+        <span class="n">square</span> <span class="o">=</span> <span class="n">board_info</span><span class="p">[</span><span class="n">modulo_space</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">&quot;space&quot;</span><span class="p">])]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">square</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">width</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="n">pic</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">square</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pic</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="p">((</span><span class="n">values</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">14</span><span class="p">))</span>
+        <span class="n">img</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">pic</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">mask</span><span class="o">=</span><span class="n">pic</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;need_roll&quot;</span><span class="p">]:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="mi">120</span> <span class="o">+</span> <span class="n">counter</span> <span class="o">*</span> <span class="mi">35</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="mi">350</span>
+            <span class="n">img</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">pic</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">mask</span><span class="o">=</span><span class="n">pic</span><span class="p">)</span>
+            <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="place_tiles"><a class="viewcode-back" href="../../camelup.html#camelup.app.place_tiles">[docs]</a><span class="k">def</span> <span class="nf">place_tiles</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">game</span><span class="p">,</span> <span class="n">board_info</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Place tiles on board</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    img : object</span>
+<span class="sd">        PIL image to put the camels on</span>
+<span class="sd">    game : class</span>
+<span class="sd">        Camelup game to place</span>
+<span class="sd">    board_info : dict</span>
+<span class="sd">        Dict with info about where to place tiles</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">space</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">tiles_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="n">board_info</span><span class="p">[</span><span class="n">space</span><span class="p">]</span>
+        <span class="n">top_left_corner</span> <span class="o">=</span> <span class="p">(</span><span class="n">tile</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="n">tile</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">bottom_right_corner</span> <span class="o">=</span> <span class="p">(</span><span class="n">tile</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">10</span><span class="p">,</span> <span class="n">tile</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">draw</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">top_left_corner</span><span class="p">,</span> <span class="n">bottom_right_corner</span><span class="p">],</span>
+            <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">225</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+            <span class="n">outline</span><span class="o">=</span><span class="p">(</span><span class="mi">29</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">29</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">tile</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">25</span><span class="p">,</span> <span class="n">tile</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">35</span><span class="p">),</span>
+            <span class="n">val</span><span class="p">[</span><span class="s2">&quot;tile_type&quot;</span><span class="p">],</span>
+            <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span>
+            <span class="n">fill</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CamelApp"><a class="viewcode-back" href="../../camelup.html#camelup.app.CamelApp">[docs]</a><span class="k">class</span> <span class="nc">CamelApp</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">Tk</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Top level tk app</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    title : str</span>
+<span class="sd">        Title of app</span>
+<span class="sd">    game : class</span>
+<span class="sd">        Camelup class to visualize</span>
+<span class="sd">    _frame : frame</span>
+<span class="sd">        Current frame to show within the app</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">tk</span><span class="o">.</span><span class="n">Tk</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Camel Up&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">camelup</span><span class="o">.</span><span class="n">Game</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span> <span class="o">=</span> <span class="n">StartPage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="o">.</span><span class="n">pack</span><span class="p">()</span>
+
+<div class="viewcode-block" id="CamelApp.switch_to_start"><a class="viewcode-back" href="../../camelup.html#camelup.app.CamelApp.switch_to_start">[docs]</a>    <span class="k">def</span> <span class="nf">switch_to_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Switch to start frame, reset the game</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">camelup</span><span class="o">.</span><span class="n">Game</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span> <span class="o">=</span> <span class="n">StartPage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="o">.</span><span class="n">pack</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CamelApp.switch_to_game"><a class="viewcode-back" href="../../camelup.html#camelup.app.CamelApp.switch_to_game">[docs]</a>    <span class="k">def</span> <span class="nf">switch_to_game</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Switch to game frame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="o">.</span><span class="n">game</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span> <span class="o">=</span> <span class="n">GamePage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="o">.</span><span class="n">pack</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="StartPage"><a class="viewcode-back" href="../../camelup.html#camelup.app.StartPage">[docs]</a><span class="k">class</span> <span class="nc">StartPage</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">Frame</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Frame for the starting page of the app</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    names : list</span>
+<span class="sd">        Names of players</span>
+<span class="sd">    player_labels : list</span>
+<span class="sd">        Player labels</span>
+<span class="sd">    num_players : object</span>
+<span class="sd">        Combobox object to select players</span>
+<span class="sd">    game_enter : object</span>
+<span class="sd">        Button object to enter game</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="n">tk</span><span class="o">.</span><span class="n">Frame</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="n">master</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">game</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_players</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Combobox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span> <span class="s2">&quot;5&quot;</span><span class="p">,</span> <span class="s2">&quot;6&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_players</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">f</span><span class="s2">&quot;Number of Players&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_enter</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Start Game&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">destroy_start</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_players</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;&lt;&lt;ComboboxSelected&gt;&gt;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_text_boxes</span><span class="p">)</span>
+
+<div class="viewcode-block" id="StartPage.destroy_start"><a class="viewcode-back" href="../../camelup.html#camelup.app.StartPage.destroy_start">[docs]</a>    <span class="k">def</span> <span class="nf">destroy_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Destroy the start frame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">counter</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">player_dict</span><span class="p">[</span><span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">switch_to_game</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="StartPage.name_text_boxes"><a class="viewcode-back" href="../../camelup.html#camelup.app.StartPage.name_text_boxes">[docs]</a>    <span class="k">def</span> <span class="nf">name_text_boxes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Genreate the text boxes to input names based of number of players selected</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
+            <span class="n">name</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_labels</span><span class="p">:</span>
+            <span class="n">label</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_enter</span><span class="o">.</span><span class="n">pack_forget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">camelup</span><span class="o">.</span><span class="n">Game</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_players</span><span class="o">.</span><span class="n">get</span><span class="p">()))</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">[:]</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_labels</span><span class="p">[:]</span>
+        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_players</span><span class="o">.</span><span class="n">get</span><span class="p">())):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">player_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">f</span><span class="s2">&quot;Player: {num+1}&quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">player_labels</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">num</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">Entry</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">num</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_enter</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">num</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="GamePage"><a class="viewcode-back" href="../../camelup.html#camelup.app.GamePage">[docs]</a><span class="k">class</span> <span class="nc">GamePage</span><span class="p">(</span><span class="n">tk</span><span class="o">.</span><span class="n">Frame</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Game frame</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    img : object</span>
+<span class="sd">        Image of camelup game</span>
+<span class="sd">    board : object</span>
+<span class="sd">        Label that contains `img`</span>
+<span class="sd">    player_turn_text : object</span>
+<span class="sd">        Text with which player&#39;s turn it is</span>
+<span class="sd">    player_turn : object</span>
+<span class="sd">        Label that contains `player_turn_text`</span>
+<span class="sd">    combo : object</span>
+<span class="sd">        Combobox with all the potential moves</span>
+<span class="sd">    turn_enter : object</span>
+<span class="sd">        Button to enter the play</span>
+<span class="sd">    turn_info : object</span>
+<span class="sd">        Info with what happened within the turn</span>
+<span class="sd">    turn_info_label : type</span>
+<span class="sd">        Lable for `turn_info`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="n">tk</span><span class="o">.</span><span class="n">Frame</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">master</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="n">master</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">game</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">236</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">81</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">board</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">img</span> <span class="o">=</span> <span class="n">ImageTk</span><span class="o">.</span><span class="n">PhotoImage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">img</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rowspan</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_turn_text</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">StringVar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_turn_text</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+            <span class="n">f</span><span class="s2">&quot;Turn: Player </span><span class="si">{self.game.player_dict[self.game.state][&#39;name&#39;]}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_turn</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">textvariable</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">player_turn_text</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_turn</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">combo</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Combobox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">available_moves</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">combo</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">combo</span><span class="o">.</span><span class="n">current</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_enter</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Play&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">play</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_enter</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_info</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">StringVar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_info_label</span> <span class="o">=</span> <span class="n">ScrolledText</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_info_label</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">turn_info</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_info_label</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GamePage.update"><a class="viewcode-back" href="../../camelup.html#camelup.app.GamePage.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Updates the image of the board</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">236</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">81</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">board_info</span> <span class="o">=</span> <span class="n">create_board</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">)</span>
+        <span class="n">place_camel_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">board_info</span><span class="p">)</span>
+        <span class="n">place_tiles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">board_info</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">img</span> <span class="o">=</span> <span class="n">ImageTk</span><span class="o">.</span><span class="n">PhotoImage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">img</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">combo</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">available_moves</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_turn_text</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+            <span class="n">f</span><span class="s2">&quot;Turn: Player </span><span class="si">{self.game.player_dict[self.game.state][&#39;name&#39;]}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="GamePage.play"><a class="viewcode-back" href="../../camelup.html#camelup.app.GamePage.play">[docs]</a>    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Executes a play</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">combo</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">combo</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Roll&quot;</span><span class="p">:</span>
+            <span class="n">need_roll</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">key</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">camel_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">camel_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;need_roll&quot;</span><span class="p">]</span>
+            <span class="p">]</span>
+            <span class="n">camel</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">need_roll</span><span class="p">)</span>
+            <span class="n">roll</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">play</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">available_moves</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">combo</span><span class="o">.</span><span class="n">get</span><span class="p">()]</span>
+                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;camel&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{camel}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;, roll&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;, </span><span class="si">{roll}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">turn_info</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;Camel: </span><span class="si">{camel}</span><span class="s2"> Rolled: {str(roll)}</span><span class="se">\n</span><span class="s2">{self.turn_info.get()}&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">turn_info_label</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">turn_info</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">output</span> <span class="o">==</span> <span class="s2">&quot;Done&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">player_turn</span><span class="o">.</span><span class="n">grid_forget</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">combo</span><span class="o">.</span><span class="n">grid_forget</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">turn_enter</span><span class="o">.</span><span class="n">grid_forget</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">236</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">81</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">board_info</span> <span class="o">=</span> <span class="n">create_board</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">)</span>
+                <span class="n">place_camel_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">board_info</span><span class="p">)</span>
+                <span class="n">place_tiles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">board_info</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">img</span> <span class="o">=</span> <span class="n">ImageTk</span><span class="o">.</span><span class="n">PhotoImage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">board</span><span class="o">.</span><span class="n">img</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Game Done&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rowspan</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">restart</span> <span class="o">=</span> <span class="n">tk</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">,</span>
+                    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Play Again&quot;</span><span class="p">,</span>
+                    <span class="n">command</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">master</span><span class="o">.</span><span class="n">switch_to_start</span><span class="p">(),</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">restart</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">available_moves</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">combo</span><span class="o">.</span><span class="n">get</span><span class="p">()])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">player_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">state</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Robot&quot;</span><span class="p">:</span>
+            <span class="n">moves</span> <span class="o">=</span> <span class="n">treesearch</span><span class="o">.</span><span class="n">get_move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">)</span>
+            <span class="n">best_move</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">moves</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">moves</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">turn_info</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;Robot Move: </span><span class="si">{best_move}</span><span class="s2"> Utility: </span><span class="si">{moves[best_move]}</span><span class="se">\n</span><span class="s2">{self.turn_info.get()}&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">turn_info_label</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">turn_info</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+            <span class="k">if</span> <span class="s2">&quot;roll&quot;</span> <span class="ow">in</span> <span class="n">best_move</span><span class="p">:</span>
+                <span class="n">need_roll</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">key</span>
+                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">camel_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">camel_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;need_roll&quot;</span><span class="p">]</span>
+                <span class="p">]</span>
+                <span class="n">camel</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">need_roll</span><span class="p">)</span>
+                <span class="n">roll</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">play</span><span class="p">(</span>
+                    <span class="n">best_move</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;camel&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{camel}</span><span class="s2">&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                        <span class="s2">&quot;, roll&quot;</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;, </span><span class="si">{roll}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">turn_info</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+                    <span class="n">f</span><span class="s2">&quot;Camel: </span><span class="si">{camel}</span><span class="s2"> Rolled: {str(roll)}</span><span class="se">\n</span><span class="s2">{self.turn_info.get()}&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">turn_info_label</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span> <span class="n">tk</span><span class="o">.</span><span class="n">END</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">turn_info</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">best_move</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">CamelApp</span><span class="p">()</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+
+          </div>
+          <footer>
+
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Michael Gracie
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+
+
+
+
+
+</body>
+</html>
