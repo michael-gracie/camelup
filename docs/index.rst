@@ -1,7 +1,7 @@
 Welcome to camelup's documentation!
 ======================================
 
-.. include:: ../../readme.rst
+.. include:: ../README.rst
 
 .. toctree::
    :maxdepth: 2
