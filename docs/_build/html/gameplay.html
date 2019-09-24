@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>&lt;no title&gt; &mdash; camelup 0.1.0 documentation</title>
+  <title>Gameplay &mdash; camelup 0.1.0 documentation</title>
 
 
 
@@ -35,6 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Robot Opponent" href="robot.html" />
+    <link rel="prev" title="Welcome to camelup’s documentation!" href="index.html" />
 </head>
 
 <body class="wy-body-for-nav">
@@ -83,10 +85,15 @@
 
 
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="readme.html">camelup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">camelup</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Gameplay</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#start">Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#game-screen">Game Screen</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#robot-plays">Robot Plays</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="robot.html">Computer Opponent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
 </ul>
 
 
@@ -132,7 +139,7 @@
 
       <li><a href="index.html">Docs</a> &raquo;</li>
 
-      <li>&lt;no title&gt;</li>
+      <li>Gameplay</li>
 
 
       <li class="wy-breadcrumbs-aside">
@@ -151,12 +158,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
 
+  <div class="section" id="gameplay">
+<h1>Gameplay<a class="headerlink" href="#gameplay" title="Permalink to this headline">¶</a></h1>
+<p>High level gameplay is quite simple, and information is found in the home page of this documentation. Below we’ll go into some of the nuances to the game.</p>
+<div class="section" id="start">
+<h2>Start<a class="headerlink" href="#start" title="Permalink to this headline">¶</a></h2>
+<p>The start to the camelup game is randomized. Each camel is rolled and placed on a tile according to that roll from 1 to 3. The happens behind the scenes before the game screen is exposed.</p>
+</div>
+<div class="section" id="game-screen">
+<h2>Game Screen<a class="headerlink" href="#game-screen" title="Permalink to this headline">¶</a></h2>
+<p>Here some basics of the game screen:</p>
+<img alt="_images/game_info.png" src="_images/game_info.png" />
+</div>
+<div class="section" id="robot-plays">
+<h2>Robot Plays<a class="headerlink" href="#robot-plays" title="Permalink to this headline">¶</a></h2>
+<p>The robot will play immediately after the play of a human player. Because of this it may seem like you do not know what the robot played. Checkout the text panel to understand what move the robot made and what utility (total coins) the robot thinks that move will achieve.</p>
+</div>
+</div>
 
 
            </div>
 
           </div>
           <footer>
+
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+
+        <a href="robot.html" class="btn btn-neutral float-right" title="Robot Opponent" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+
+
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to camelup’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+    </div>
 
 
   <hr/>

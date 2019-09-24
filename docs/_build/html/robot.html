@@ -1,0 +1,255 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Robot Opponent &mdash; camelup 0.1.0 documentation</title>
+
+
+
+
+
+
+
+
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+
+
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+
+
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="camelup" href="modules.html" />
+    <link rel="prev" title="Gameplay" href="gameplay.html" />
+</head>
+
+<body class="wy-body-for-nav">
+
+
+  <div class="wy-grid-for-nav">
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+
+            <a href="index.html" class="icon icon-home"> camelup
+
+
+
+          </a>
+
+
+
+
+              <div class="version">
+                0.1.0
+              </div>
+
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+
+
+
+
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gameplay.html">Gameplay</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Computer Opponent</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#multi-agent-utility">Multi Agent Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-randomness">Adding randomness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tree-depth">Tree Depth</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#utility-function">Utility Function</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pruning">Pruning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#caching">Caching</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+</ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+      <nav class="wy-nav-top" aria-label="top navigation">
+
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">camelup</a>
+
+      </nav>
+
+
+      <div class="wy-nav-content">
+
+        <div class="rst-content">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+
+      <li><a href="index.html">Docs</a> &raquo;</li>
+
+      <li>Robot Opponent</li>
+
+
+      <li class="wy-breadcrumbs-aside">
+
+
+            <a href="_sources/robot.rst.txt" rel="nofollow"> View page source</a>
+
+
+      </li>
+
+  </ul>
+
+
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+
+  <div class="section" id="robot-opponent">
+<h1>Robot Opponent<a class="headerlink" href="#robot-opponent" title="Permalink to this headline">¶</a></h1>
+<p>There is a body of game theory algorithms that focuses on different types of games. These include <code class="docutils literal notranslate"><span class="pre">expectimax</span></code>, <code class="docutils literal notranslate"><span class="pre">expetiminimax</span></code> and others. They all center around the idea that a game revolves around a tree of decisions with each player having their own ambitions.</p>
+<div class="section" id="multi-agent-utility">
+<h2>Multi Agent Utility<a class="headerlink" href="#multi-agent-utility" title="Permalink to this headline">¶</a></h2>
+<p>The multi agent utility algorithm assumes that each agent within a game is attempting to maximize their own utility within the game. The robot player assumes that each player is rational and their selection will maximize utility. The robot iterates through all possible options and builds a tree for each option to understand the payoff for that option, assuming that the opponent is a utility maximizer. The view below describes this</p>
+<img alt="_images/multi_agent.png" src="_images/multi_agent.png" />
+</div>
+<div class="section" id="adding-randomness">
+<h2>Adding randomness<a class="headerlink" href="#adding-randomness" title="Permalink to this headline">¶</a></h2>
+<p>The option of rolling the dice to move the camels adds uncertainty to the game. No longer can the robot can guarantee payoffs assuming that opponents are playing optimally. To account for this the robot calculates an expectation for the payoff by weighing all outcomes from the random event.</p>
+<img alt="_images/multi_agent_chance.png" src="_images/multi_agent_chance.png" />
+</div>
+<div class="section" id="tree-depth">
+<h2>Tree Depth<a class="headerlink" href="#tree-depth" title="Permalink to this headline">¶</a></h2>
+<p>Each turn a given player has numerous moves that they can potentially make. In game theory this is called a high branching factor. This will result in a high number of nodes as your tree will grow very wide. Additionally when the camel’s are at the start of the game the tree will grow very high because it will take many moves to reach the end of the games. The way that we have adjusted for the computational complexity associated with such a large tree is by fixing the depth to 2 layers. Because the end of the game and final payoff is unlikely to be in the 2 layer tree, we have created a utility function to estimate the value of a players current position.</p>
+<div class="section" id="utility-function">
+<h3>Utility Function<a class="headerlink" href="#utility-function" title="Permalink to this headline">¶</a></h3>
+<p>The utility is calculated as follows:</p>
+<div class="math">
+<p><span class="math">Utility = coins + E(tiles) + E(roundbets) + E(gamebets)</span></p>
+</div><p>But how do we the expectation for round bet, game bet and tile value? Then answer is <strong>Monte Carlo simulation</strong>. The program plays out the end of the game and end of the turn 400 times and then takes the average payoffs from those simulations. 400 iterations was chosen because the expectation converges at that point for the most complex camel scenarios (e.g. when they are all bunched together with tiles in front of them).</p>
+</div>
+</div>
+<div class="section" id="pruning">
+<h2>Pruning<a class="headerlink" href="#pruning" title="Permalink to this headline">¶</a></h2>
+<p>We use depth to reduce the height of our tree. But also use pruning to eliminate moves that simply don’t make sense. The following heuristics are applied:</p>
+<ul class="simple">
+<li><p>Don’t place a tile more than 3 spaces in front of the camel in first place</p></li>
+<li><p>Take the top 3 likely camels to win the round based on the monte carlo simulation</p></li>
+<li><p>Take the top 2 likely camels to win the game based on the monte carlo simulation</p></li>
+<li><p>Take the top 2 likely camels to lose the game based on the monte carlo simulation</p></li>
+</ul>
+</div>
+<div class="section" id="caching">
+<h2>Caching<a class="headerlink" href="#caching" title="Permalink to this headline">¶</a></h2>
+<p>A lot of the same moves result in the same positions on the board. For example, if a player a bet tiles, the chances that a camel comes in first for the round doesn’t change. For this reason we cache the results of the monte carlo simulation. If the exact same board placement arises in a future branch, those monte carlo expectations are reused to save on computation.</p>
+</div>
+</div>
+
+
+           </div>
+
+          </div>
+          <footer>
+
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+
+        <a href="modules.html" class="btn btn-neutral float-right" title="camelup" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+
+
+        <a href="gameplay.html" class="btn btn-neutral float-left" title="Gameplay" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+    </div>
+
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Michael Gracie
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+
+
+
+
+
+</body>
+</html>

@@ -7,10 +7,8 @@ Welcome to camelup's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   readme
-   Installation <Installation>
    Gameplay <gameplay>
-   Robot Methodology
+   Computer Opponent <robot>
    API Reference <modules>
    Contributing <contributing>
 
