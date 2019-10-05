@@ -475,6 +475,25 @@ class GamePage(tk.Frame):
                     f"Camel: {camel} Rolled: {str(roll)}\n{self.turn_info.get()}"
                 )
                 self.turn_info_label.replace("1.0", tk.END, self.turn_info.get())
+                if output == "Done":
+                    self.player_turn.grid_forget()
+                    self.combo.grid_forget()
+                    self.turn_enter.grid_forget()
+                    self.img = Image.new("RGB", (500, 500), color=(236, 192, 81))
+                    self.board_info = create_board(self.img, self.game)
+                    place_camel_dict(self.img, self.game, self.board_info)
+                    place_tiles(self.img, self.game, self.board_info)
+                    self.board.img = ImageTk.PhotoImage(self.img)
+                    self.board.config(image=self.board.img)
+                    self.end = tk.Label(self, text="Game Done")
+                    self.end.grid(column=1, row=0, rowspan=2)
+                    self.restart = tk.Button(
+                        self,
+                        text="Play Again",
+                        command=lambda: self.master.switch_to_start(),
+                    )
+                    self.restart.grid(column=1, row=2)
+                    return
             else:
                 self.game.play(best_move)
         self.update()

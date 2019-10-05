@@ -31,6 +31,10 @@ The utility is calculated as follows:
 
 But how do we the expectation for round bet, game bet and tile value? Then answer is **Monte Carlo simulation**. The program plays out the end of the game and end of the turn 400 times and then takes the average payoffs from those simulations. 400 iterations was chosen because the expectation converges at that point for the most complex camel scenarios (e.g. when they are all bunched together with tiles in front of them).
 
+Game Bet Opportunity Cost
+-------------------------
+When the game starts, the camels are closely bunched together and the probability a camel wins a turn and the game are very similar. Because the game results have a larger payoff the robot favors placing a game bet. The effect is that the robot misses out on the turn bets for the first turn because the robot can't take into account the opportunity cost of missing an earlier turn bet payoff. To account for this, a hacky fix was implemented such that the robot will only bet on the game if a camel has a greater than 30% chance of winning or losing the game. More research could be done to ground this.
+
 Pruning
 -------
 

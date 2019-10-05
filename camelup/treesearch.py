@@ -174,17 +174,23 @@ def calc_utility_np(game, iter):
         turn_prob_first, turn_prob_second, turn_prob_other, exp_tile_points = CACHE[
             str(game.camel_dict) + str(game.tiles_dict)
         ][0]
-        game_prob_first, game_prob_last, game_prob_other = CACHE[
+        game_prob_first, game_prob_last = CACHE[
             str(game.camel_dict) + str(game.tiles_dict)
         ][1]
     else:
         turn_prob_first, turn_prob_second, turn_prob_other, exp_tile_points = turn_prob_numpy(
             game, iter
         )
-        game_prob_first, game_prob_last, game_prob_other = game_prob_numpy(game, iter)
+        game_prob_first, game_prob_last = game_prob_numpy(game, iter)
+        game_prob_first["prob"] = np.where(
+            game_prob_first["prob"] < 0.30, 0, game_prob_first["prob"]
+        )
+        game_prob_last["prob"] = np.where(
+            game_prob_last["prob"] < 0.30, 0, game_prob_last["prob"]
+        )
         CACHE[str(game.camel_dict) + str(game.tiles_dict)] = [
             (turn_prob_first, turn_prob_second, turn_prob_other, exp_tile_points),
-            (game_prob_first, game_prob_last, game_prob_other),
+            (game_prob_first, game_prob_last),
         ]
     winner_bets, loser_bets = winner_loser_bets_to_numpy(game)
     bet_tiles = bet_tiles_to_numpy(game)
@@ -205,8 +211,10 @@ def calc_utility_np(game, iter):
     final = util.numpy_left_join(final, bets_groupby, "player")
     game_first = util.numpy_left_join(winner_bets, game_prob_first, "camel")
     game_last = util.numpy_left_join(loser_bets, game_prob_last, "camel")
-    game_winner_other = util.numpy_left_join(winner_bets, game_prob_other, "camel")
-    game_loser_other = util.numpy_left_join(loser_bets, game_prob_other, "camel")
+    game_winner_other = deepcopy(game_first)
+    game_winner_other["prob"] = 1 - game_first["prob"]
+    game_loser_other = deepcopy(game_last)
+    game_loser_other["prob"] = 1 - game_last["prob"]
     game_first = util.add_col_np(
         game_first, "points", config.BET_SCALING[0 : game_first.shape[0]]
     )
@@ -381,10 +389,7 @@ def game_prob_numpy(game, iter):
     loser_place = max(result["place"])
     prob_first = create_prob_array(result[result["place"] == 1], iter)
     prob_last = create_prob_array(result[result["place"] == loser_place], iter)
-    prob_other = create_prob_array(
-        result[(result["place"] != 1) & (result["place"] != loser_place)], iter
-    )
-    return prob_first, prob_last, prob_other
+    return prob_first, prob_last
 
 
 def winner_loser_bets_to_numpy(game):
