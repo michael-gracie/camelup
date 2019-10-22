@@ -18,6 +18,11 @@ Quick Installation
   pip install git+https://github.com/michael-gracie/camelup.git
 
 
+🚨🚨Warning🚨🚨
+------------------
+
+Do not run on Mac OSX 10.14.6. There is a known issue with this version and the ``tkinter`` package. Running the app will result in your computer crashing and a locked screen. More info on the defect can be found `here <https://discussions.apple.com/thread/250549297>`_
+
 Gameplay
 ------------------
 
